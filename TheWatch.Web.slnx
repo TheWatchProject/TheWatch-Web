@@ -1,0 +1,7 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="TheWatch.DotNet/src/Clients/TheWatch.Web.Admin/TheWatch.Web.Admin.csproj" />
+    <Project Path="TheWatch.DotNet/src/Libraries/TheWatch.UI.RazorComponents/TheWatch.UI.RazorComponents.csproj" />
+    <Project Path="TheWatch.DotNet/src/Libraries/Generated/TheWatch.Catalog.Experience/TheWatch.Catalog.Experience.csproj" />
+  </Folder>
+</Solution>
