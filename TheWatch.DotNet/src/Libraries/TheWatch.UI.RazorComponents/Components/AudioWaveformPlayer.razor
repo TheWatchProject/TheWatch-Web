@@ -1,0 +1,18 @@
+@using Radzen
+@using Radzen.Blazor
+
+<div style="background: #0f172a; border: 1px solid #334155; border-radius: 8px; padding: 12px; display: flex; align-items: center; gap: 12px;">
+    <RadzenButton Icon="@(isPlaying ? "pause" : "play_arrow")" ButtonStyle="ButtonStyle.Primary" Size="ButtonSize.Small" Click="@TogglePlay" />
+    <div style="flex: 1;">
+        <div style="font-size: 0.85rem; font-weight: 600; color: #f8fafc;">@AudioTitle</div>
+        <div style="font-size: 0.75rem; color: #64748b;">@DurationText • 16 kHz PCM Radio Stream</div>
+    </div>
+    <span style="font-size: 0.75rem; color: #10b981; font-weight: 700;">LIVE</span>
+</div>
+
+@code {
+    [Parameter] public string AudioTitle { get; set; } = "911 Dispatch Radio Audio";
+    [Parameter] public string DurationText { get; set; } = "00:42";
+    private bool isPlaying = false;
+    private void TogglePlay() => isPlaying = !isPlaying;
+}

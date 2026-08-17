@@ -1,0 +1,34 @@
+@page "/incidents"
+@using TheWatch.Domain.Entities
+@using Radzen.Blazor
+
+<PageTitle>Emergency Incident Operations HQ</PageTitle>
+
+<RadzenHeading Size="H1" Text="Live Incident Operations Center" />
+
+<RadzenCard class="rz-my-4">
+    <RadzenDataGrid Data="@incidents" TItem="Incident" AllowFiltering="true" AllowPaging="true" PageSize="10" AllowSorting="true" ColumnWidth="200px">
+        <Columns>
+            <RadzenDataGridColumn TItem="Incident" Property="Id" Title="Incident ID" Width="120px" />
+            <RadzenDataGridColumn TItem="Incident" Property="Title" Title="Title" />
+            <RadzenDataGridColumn TItem="Incident" Property="Severity" Title="Severity" Width="130px">
+                <Template Context="data">
+                    <RadzenBadge BadgeStyle="@(data.Severity == "CRITICAL" ? BadgeStyle.Danger : BadgeStyle.Warning)" Text="@data.Severity" />
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="Incident" Property="Status" Title="Status" Width="130px" />
+            <RadzenDataGridColumn TItem="Incident" Property="Latitude" Title="Latitude" Width="120px" />
+            <RadzenDataGridColumn TItem="Incident" Property="Longitude" Title="Longitude" Width="120px" />
+            <RadzenDataGridColumn TItem="Incident" Property="ReportedAt" Title="Reported (UTC)" FormatString="{0:d}" Width="160px" />
+        </Columns>
+    </RadzenDataGrid>
+</RadzenCard>
+
+@code {
+    private List<Incident> incidents = new()
+    {
+        new Incident { Id = "INC-101", Title = "Chemical Storage Tank Leak", Severity = "CRITICAL", Status = "ACTIVE", Latitude = 29.7604, Longitude = -95.3698 },
+        new Incident { Id = "INC-102", Title = "Structural Fire Complex", Severity = "HIGH", Status = "DISPATCHED", Latitude = 29.7589, Longitude = -95.3677 },
+        new Incident { Id = "INC-103", Title = "Maritime Search & Rescue", Severity = "HIGH", Status = "ACTIVE", Latitude = 29.3013, Longitude = -94.7977 }
+    };
+}

@@ -1,0 +1,53 @@
+@using Radzen.Blazor
+
+<div class="heatmap-panel rz-p-4 rz-border-radius-2" style="background: #1e293b; border: 1px solid #334155;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+        <div>
+            <div style="font-weight: 700; color: #f8fafc; font-size: 1rem;">Responder Coverage Heatmap</div>
+            <div style="font-size: 0.8rem; color: #94a3b8;">Geohash Level @GeohashPrecision Precision</div>
+        </div>
+        <div class="badge-status" style="background: #065f46; color: #34d399; font-size: 0.75rem; padding: 2px 8px; border-radius: 4px;">
+            @TotalActiveResponders Available Responders
+        </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 8px; margin-top: 10px;">
+        @foreach (var cell in Zones)
+        {
+            <div class="heatmap-cell rz-p-2 rz-border-radius-1" style="background: @GetCellBackground(cell.Density); border: 1px solid rgba(255,255,255,0.1); text-align: center;">
+                <div style="font-size: 0.75rem; color: #cbd5e1; font-family: monospace;">@cell.GeohashPrefix</div>
+                <div style="font-weight: 700; font-size: 1.1rem; color: #ffffff;">@cell.ResponderCount</div>
+                <div style="font-size: 0.7rem; color: #94a3b8;">@cell.CoverageLabel</div>
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter] public int GeohashPrecision { get; set; } = 6;
+    [Parameter] public int TotalActiveResponders { get; set; } = 14;
+    [Parameter] public List<HeatmapZone> Zones { get; set; } = new()
+    {
+        new() { GeohashPrefix = "9q8yyk", ResponderCount = 4, Density = 0.8, CoverageLabel = "High Density" },
+        new() { GeohashPrefix = "9q8yym", ResponderCount = 6, Density = 1.0, CoverageLabel = "Optimal" },
+        new() { GeohashPrefix = "9q8yyq", ResponderCount = 2, Density = 0.4, CoverageLabel = "Moderate" },
+        new() { GeohashPrefix = "9q8yyr", ResponderCount = 1, Density = 0.2, CoverageLabel = "Sparse" },
+        new() { GeohashPrefix = "9q8yyw", ResponderCount = 1, Density = 0.2, CoverageLabel = "Sparse" }
+    };
+
+    private string GetCellBackground(double density) => density switch
+    {
+        >= 0.8 => "rgba(16, 185, 129, 0.35)",
+        >= 0.5 => "rgba(56, 189, 248, 0.3)",
+        >= 0.2 => "rgba(245, 158, 11, 0.25)",
+        _ => "rgba(239, 68, 68, 0.2)"
+    };
+
+    public class HeatmapZone
+    {
+        public string GeohashPrefix { get; set; } = string.Empty;
+        public int ResponderCount { get; set; }
+        public double Density { get; set; }
+        public string CoverageLabel { get; set; } = string.Empty;
+    }
+}

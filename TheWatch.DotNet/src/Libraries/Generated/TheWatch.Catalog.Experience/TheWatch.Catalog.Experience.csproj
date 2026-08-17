@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <PackageId>TheWatch.Catalog.Experience</PackageId>
+    <Description>Web, Blazor, dashboards, clients, mobile, MAUI, wearable, and presentation APIs.</Description>
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../TheWatch.ApiCatalog/TheWatch.ApiCatalog.csproj" />
+    <EmbeddedResource Include="Catalog.tsv.gz" LogicalName="TheWatch.Catalog.Experience.Catalog.tsv.gz" />
+  </ItemGroup>
+</Project>

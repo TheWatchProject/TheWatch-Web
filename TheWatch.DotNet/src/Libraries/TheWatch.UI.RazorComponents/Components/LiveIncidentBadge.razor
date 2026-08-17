@@ -1,0 +1,31 @@
+<span class="thewatch-badge" style="display: inline-flex; align-items: center; padding: 4px 10px; border-radius: 9999px; font-weight: 700; font-size: 0.75rem; background-color: @GetBgColor(); color: @GetTextColor();">
+    <span style="width: 8px; height: 8px; border-radius: 50%; background-color: currentColor; margin-right: 6px; animation: pulse 1.5s infinite;"></span>
+    @Severity
+</span>
+
+<style>
+@@keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(1.2); }
+}
+</style>
+
+@code {
+    [Parameter] public string Severity { get; set; } = "HIGH";
+
+    private string GetBgColor() => Severity switch
+    {
+        "CRITICAL" => "#fee2e2",
+        "HIGH" => "#fef3c7",
+        "MODERATE" => "#e0f2fe",
+        _ => "#f3f4f6"
+    };
+
+    private string GetTextColor() => Severity switch
+    {
+        "CRITICAL" => "#b91c1c",
+        "HIGH" => "#b45309",
+        "MODERATE" => "#0369a1",
+        _ => "#374151"
+    };
+}

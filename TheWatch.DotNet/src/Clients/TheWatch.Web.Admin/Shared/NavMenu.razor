@@ -1,0 +1,20 @@
+@using Microsoft.AspNetCore.Components.Authorization
+@inject NavigationManager NavManager
+@inject AuthenticationStateProvider AuthProvider
+
+<NavMenu>
+    <ul class="nav flex-column">
+        <li class="nav-item"><a class="nav-link" href="/dashboard"><i class="bi bi-speedometer2 me-2"></i>Dashboard</a></li>
+        <li class="nav-item"><a class="nav-link" href="/tactical-map"><i class="bi bi-geo-alt-fill me-2"></i>Tactical GIS Map</a></li>
+        <li class="nav-item"><a class="nav-link" href="/drone-fleet"><i class="bi bi-airplane-engines me-2"></i>Drone Fleet Command</a></li>
+        <li class="nav-item"><a class="nav-link" href="/dispatch-console"><i class="bi bi-headset me-2"></i>Dispatch Console</a></li>
+        <li class="nav-item"><a class="nav-link" href="/incidents"><i class="bi bi-exclamation-octagon me-2"></i>Incidents</a></li>
+        <li class="nav-item"><a class="nav-link" href="/medical-triage"><i class="bi bi-heart-pulse me-2"></i>Medical Triage</a></li>
+        <li class="nav-item"><a class="nav-link" href="/family-health"><i class="bi bi-people-fill me-2"></i>Family Safety</a></li>
+        <li class="nav-item"><a class="nav-link" href="/citizen-hero"><i class="bi bi-trophy-fill me-2"></i>Citizen Hero</a></li>
+        <li class="nav-item"><a class="nav-link" href="/surveillance-cctv"><i class="bi bi-camera-video-fill me-2"></i>CCTV Matrix</a></li>
+        <li class="nav-item"><a class="nav-link" href="/installation-security"><i class="bi bi-building-lock me-2"></i>Installation Security</a></li>
+        <li class="nav-item"><a class="nav-link" href="/evidence-chain"><i class="bi bi-shield-lock me-2"></i>Evidence Ledger</a></li>
+        <li class="nav-item"><a class="nav-link" href="/settings"><i class="bi bi-gear me-2"></i>Settings</a></li>
+    </ul>
+</NavMenu>

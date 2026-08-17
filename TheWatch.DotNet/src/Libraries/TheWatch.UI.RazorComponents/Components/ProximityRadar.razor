@@ -1,0 +1,98 @@
+@namespace TheWatch.UI.RazorComponents.Components
+
+<div class="radar-canvas-container">
+    <!-- Radar Grid Background Rings -->
+    <div class="radar-ring" style="width: 100px; height: 100px;"></div>
+    <div class="radar-ring" style="width: 200px; height: 200px;"></div>
+    <div class="radar-ring" style="width: 300px; height: 300px;"></div>
+    <div class="radar-ring" style="width: 380px; height: 380px;"></div>
+
+    <!-- Crosshairs -->
+    <div style="position: absolute; top: 0; bottom: 0; left: 50%; width: 1px; background: rgba(16,185,129,0.15); pointer-events: none;"></div>
+    <div style="position: absolute; left: 0; right: 0; top: 50%; height: 1px; background: rgba(16,185,129,0.15); pointer-events: none;"></div>
+
+    <!-- Rotating Radar Sweep -->
+    <div class="radar-sweep"></div>
+
+    <!-- Center User Marker -->
+    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 16px; height: 16px; border-radius: 50%; background: #60a5fa; border: 2px solid white; box-shadow: 0 0 10px #60a5fa; z-index: 10;"></div>
+
+    <!-- Hazard Zones -->
+    @if (HazardZones != null)
+    {
+        @foreach (var hazard in HazardZones)
+        {
+            <div style="position: absolute; top: @(hazard.TopPercent)%; left: @(hazard.LeftPercent)%; transform: translate(-50%, -50%); width: 90px; height: 90px; border-radius: 50%; background: rgba(220, 38, 38, 0.25); border: 2px dashed #f87171; pointer-events: none;">
+                <span style="font-size: 0.65rem; color: #fca5a5; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; font-weight: bold;">@hazard.Name</span>
+            </div>
+        }
+    }
+
+    <!-- Responders Blips -->
+    @if (Responders != null)
+    {
+        @foreach (var resp in Responders)
+        {
+            var topOffset = 50 + (int)((resp.Latitude - CenterLatitude) * 4000);
+            var leftOffset = 50 + (int)((resp.Longitude - CenterLongitude) * 4000);
+
+            <div class="radar-blip" style="top: @(topOffset)%; left: @(leftOffset)%; background: @(resp.Role == "Police" ? "#60a5fa" : resp.Role == "Fire" ? "#fb923c" : "#34d399"); box-shadow: 0 0 8px currentColor;"
+                 title="@resp.Name (@resp.Role) - ETA: @resp.EtaMinutes min"
+                 @onclick="() => SelectResponder(resp)">
+            </div>
+        }
+    }
+
+    <!-- Radar Overlay HUD Info -->
+    <div style="position: absolute; top: 12px; left: 16px; font-size: 0.72rem; color: #34d399; font-family: monospace;">
+        <div>LAT: @CenterLatitude.ToString("F4")° N | LON: @Math.Abs(CenterLongitude).ToString("F4")° W</div>
+        <div>SCAN RANGE: @ScanRangeKm.ToString("F1") KM | TACTICAL RADAR: ACTIVE</div>
+    </div>
+
+    @if (_selectedResponder != null)
+    {
+        <div style="position: absolute; bottom: 12px; left: 16px; right: 16px; background: rgba(9, 9, 11, 0.9); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 8px 12px; display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; z-index: 20;">
+            <div>
+                <strong style="color: #60a5fa;">@_selectedResponder.Name</strong>
+                <span style="color: rgba(255,255,255,0.6); margin-left: 8px;">@_selectedResponder.Role • @_selectedResponder.DistanceKm.ToString("F1") km away</span>
+            </div>
+            <div style="color: #34d399; font-weight: bold;">ETA: @_selectedResponder.EtaMinutes min</div>
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter] public double CenterLatitude { get; set; } = 37.7749;
+    [Parameter] public double CenterLongitude { get; set; } = -122.4194;
+    [Parameter] public double ScanRangeKm { get; set; } = 5.0;
+    [Parameter] public List<RadarResponderBlip>? Responders { get; set; }
+    [Parameter] public List<RadarHazardZone>? HazardZones { get; set; }
+    [Parameter] public EventCallback<RadarResponderBlip> OnResponderSelected { get; set; }
+
+    private RadarResponderBlip? _selectedResponder;
+
+    private async Task SelectResponder(RadarResponderBlip resp)
+    {
+        _selectedResponder = resp;
+        if (OnResponderSelected.HasDelegate)
+            await OnResponderSelected.InvokeAsync(resp);
+    }
+
+    public class RadarResponderBlip
+    {
+        public string Id { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
+        public string Role { get; set; } = "EMS";
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
+        public double DistanceKm { get; set; }
+        public int EtaMinutes { get; set; }
+    }
+
+    public class RadarHazardZone
+    {
+        public string Name { get; set; } = "HAZARD";
+        public int TopPercent { get; set; } = 35;
+        public int LeftPercent { get; set; } = 65;
+    }
+}

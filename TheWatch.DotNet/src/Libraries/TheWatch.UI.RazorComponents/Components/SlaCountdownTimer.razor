@@ -1,0 +1,11 @@
+@using Radzen.Blazor
+
+<div style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 8px; border-radius: 4px; background: @(isBreached ? "#fee2e2" : "#fef3c7"); color: @(isBreached ? "#b91c1c" : "#b45309"); font-weight: 700; font-size: 0.8rem;">
+    <RadzenIcon Icon="timer" />
+    <span>SLA: @RemainingMinutes min remaining</span>
+</div>
+
+@code {
+    [Parameter] public int RemainingMinutes { get; set; } = 8;
+    private bool isBreached => RemainingMinutes <= 0;
+}

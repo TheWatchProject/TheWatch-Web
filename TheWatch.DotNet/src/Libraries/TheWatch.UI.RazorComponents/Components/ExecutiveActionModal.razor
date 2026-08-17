@@ -1,0 +1,25 @@
+@using Radzen
+@using Radzen.Blazor
+
+@if (IsOpen)
+{
+    <div style="position: fixed; inset: 0; background: rgba(0,0,0,0.75); display: flex; align-items: center; justify-content: center; z-index: 9999;">
+        <div style="background: #0f172a; border: 2px solid #ef4444; border-radius: 8px; padding: 24px; max-width: 500px; width: 90%; color: white;">
+            <div class="rz-text-h5" style="color: #ef4444; font-weight: 700;">⚠️ EXECUTIVE ACTION REQUIRED</div>
+            <div class="rz-my-3">@ActionDescription</div>
+            <div class="rz-text-caption rz-color-base-400">Two-Person Dual Authorization Rule Enforced. Requires Commander Signature.</div>
+
+            <div class="rz-mt-4" style="display: flex; gap: 12px; justify-content: flex-end;">
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Text="Cancel" Click="@OnCancel" />
+                <RadzenButton ButtonStyle="ButtonStyle.Danger" Text="AUTHORIZE & EXECUTE" Click="@OnConfirm" />
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter] public bool IsOpen { get; set; }
+    [Parameter] public string ActionDescription { get; set; } = string.Empty;
+    [Parameter] public EventCallback OnConfirm { get; set; }
+    [Parameter] public EventCallback OnCancel { get; set; }
+}

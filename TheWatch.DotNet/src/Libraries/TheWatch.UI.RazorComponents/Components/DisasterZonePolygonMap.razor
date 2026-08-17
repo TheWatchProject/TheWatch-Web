@@ -1,0 +1,43 @@
+@using Radzen.Blazor
+
+<div class="disaster-zone-map rz-border-radius-2" style="background: #1e293b; border: 1px solid #334155; padding: 16px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+        <div>
+            <div style="font-weight: 700; color: #f8fafc; font-size: 1rem;">@ZoneName</div>
+            <div style="font-size: 0.8rem; color: #94a3b8;">Type: @DisasterType • Order: @EvacuationOrder.ToUpper()</div>
+        </div>
+        <span style="font-size: 0.75rem; font-weight: 700; color: white; background: @GetSeverityColor(Severity); padding: 3px 8px; border-radius: 4px;">
+            @Severity.ToUpper()
+        </span>
+    </div>
+
+    <!-- Map Polygon Canvas Area -->
+    <div style="height: 220px; background: #0f172a; border-radius: 6px; border: 1px solid #334155; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #94a3b8; position: relative;">
+        <i class="rz-icon" style="font-size: 2.5rem; color: #f97316; margin-bottom: 6px;">warning</i>
+        <div style="font-size: 0.875rem; color: #e2e8f0; font-weight: 600;">GeoJSON Evacuation Perimeter Polygon</div>
+        <div style="font-size: 0.75rem; color: #64748b; margin-top: 4px;">Center: @CenterLat.ToString("F4"), @CenterLng.ToString("F4") (Radius: @(RadiusKm ?? 5.0) km)</div>
+        <div style="font-size: 0.75rem; color: #38bdf8; margin-top: 6px;">
+            Estimated Affected Population: @AffectedPopulation.ToString("N0")
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public string ZoneName { get; set; } = "North Sector Wildfire";
+    [Parameter] public string DisasterType { get; set; } = "wildfire";
+    [Parameter] public string Severity { get; set; } = "mandatory_evacuation";
+    [Parameter] public string EvacuationOrder { get; set; } = "mandatory";
+    [Parameter] public double CenterLat { get; set; } = 37.7749;
+    [Parameter] public double CenterLng { get; set; } = -122.4194;
+    [Parameter] public double? RadiusKm { get; set; } = 8.5;
+    [Parameter] public int AffectedPopulation { get; set; } = 14200;
+
+    private string GetSeverityColor(string severity) => severity.ToLowerInvariant() switch
+    {
+        "catastrophic" => "#991b1b",
+        "mandatory_evacuation" => "#dc2626",
+        "warning" => "#ea580c",
+        "watch" => "#f59e0b",
+        _ => "#38bdf8"
+    };
+}

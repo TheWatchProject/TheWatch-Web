@@ -1,0 +1,29 @@
+<div class="watch-card @CustomClass" style="@CustomStyle">
+    @if (!string.IsNullOrEmpty(Title) || HeaderContent != null)
+    {
+        <div class="watch-card-header">
+            <div class="watch-card-title">
+                @if (!string.IsNullOrEmpty(Icon))
+                {
+                    <span style="color: @IconColor">@Icon</span>
+                }
+                @Title
+            </div>
+            @if (HeaderContent != null)
+            {
+                <div>@HeaderContent</div>
+            }
+        </div>
+    }
+    @ChildContent
+</div>
+
+@code {
+    [Parameter] public string? Title { get; set; }
+    [Parameter] public string? Icon { get; set; }
+    [Parameter] public string IconColor { get; set; } = "#dc2626";
+    [Parameter] public string? CustomClass { get; set; }
+    [Parameter] public string? CustomStyle { get; set; }
+    [Parameter] public RenderFragment? HeaderContent { get; set; }
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+}

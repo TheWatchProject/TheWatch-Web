@@ -1,0 +1,17 @@
+@using Radzen.Blazor
+
+<div style="background: #1e293b; border: 1px solid #334155; border-radius: 8px; padding: 16px; min-width: 180px; text-align: center;">
+    <div class="rz-text-caption rz-color-base-400">@DroneId</div>
+    <div style="font-size: 1.5rem; font-weight: 700; color: #38bdf8; margin: 8px 0;">@BatteryPercent%</div>
+    <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: #94a3b8;">
+        <span>Alt: @(AltitudeMeters)m</span>
+        <span>Spd: @(SpeedKmh)km/h</span>
+    </div>
+</div>
+
+@code {
+    [Parameter] public string DroneId { get; set; } = "DRONE-01";
+    [Parameter] public int BatteryPercent { get; set; } = 94;
+    [Parameter] public double AltitudeMeters { get; set; } = 45.0;
+    [Parameter] public double SpeedKmh { get; set; } = 52.3;
+}

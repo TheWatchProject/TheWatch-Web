@@ -1,0 +1,52 @@
+@using Radzen.Blazor
+@using Microsoft.JSInterop
+@inject IJSRuntime JSRuntime
+
+<div class="incident-map-container rz-border-radius-2" style="position: relative; width: 100%; height: @Height; background: #0f172a; border: 1px solid #334155; overflow: hidden;">
+    <div id="@MapId" style="width: 100%; height: 100%;">
+        <!-- Map Canvas Placeholder / Interactive Leaflet Container -->
+        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; color: #94a3b8;">
+            <i class="rz-icon" style="font-size: 3rem; color: #38bdf8; margin-bottom: 8px;">map</i>
+            <div style="font-weight: 600; font-size: 1.1rem; color: #f1f5f9;">Live Incident Geospatial Map</div>
+            <div style="font-size: 0.875rem;">Center: @CenterLatitude.ToString("F4"), @CenterLongitude.ToString("F4") | Zoom: @ZoomLevel</div>
+            <div style="margin-top: 12px; font-size: 0.8rem; background: #1e293b; padding: 4px 12px; border-radius: 9999px; border: 1px solid #475569;">
+                @ActiveIncidentsCount Active Incidents • @ActiveRespondersCount Tracked Responders
+            </div>
+        </div>
+    </div>
+
+    @if (ShowControls)
+    {
+        <div style="position: absolute; top: 12px; right: 12px; display: flex; gap: 6px; z-index: 10;">
+            <button class="rz-button rz-button-sm rz-secondary" @onclick="CenterOnIncident">Center</button>
+            <button class="rz-button rz-button-sm rz-info" @onclick="ToggleHeatmap">@(ShowHeatmap ? "Hide Heatmap" : "Show Heatmap")</button>
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter] public string MapId { get; set; } = "map-" + Guid.NewGuid().ToString("N");
+    [Parameter] public string Height { get; set; } = "400px";
+    [Parameter] public double CenterLatitude { get; set; } = 37.7749;
+    [Parameter] public double CenterLongitude { get; set; } = -122.4194;
+    [Parameter] public int ZoomLevel { get; set; } = 14;
+    [Parameter] public int ActiveIncidentsCount { get; set; } = 1;
+    [Parameter] public int ActiveRespondersCount { get; set; } = 2;
+    [Parameter] public bool ShowControls { get; set; } = true;
+    [Parameter] public EventCallback OnMapCentered { get; set; }
+
+    private bool ShowHeatmap { get; set; } = false;
+
+    private async Task CenterOnIncident()
+    {
+        if (OnMapCentered.HasDelegate)
+        {
+            await OnMapCentered.InvokeAsync();
+        }
+    }
+
+    private void ToggleHeatmap()
+    {
+        ShowHeatmap = !ShowHeatmap;
+    }
+}

@@ -1,0 +1,30 @@
+@page "/dispatch"
+@using TheWatch.UI.RazorComponents.Components
+@using Radzen.Blazor
+
+<PageTitle>Computer-Aided Dispatch (CAD) Console</PageTitle>
+
+<div class="rz-p-4">
+    <RadzenHeading Size="H1" Text="Computer-Aided Dispatch (CAD) Console" />
+    <div class="rz-text-body2 rz-my-2 rz-color-base-300">Live field unit routing, priority queues, and nearest-neighbor unit matching.</div>
+
+    <RadzenCard class="rz-my-4">
+        <RadzenHeading Size="H3" Text="Active Dispatch Queue" />
+        <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 12px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: #1e293b; border-radius: 6px;">
+                <div>
+                    <strong>INC-1004: Gas Leak & Vapor Hazard</strong>
+                    <div class="rz-text-caption rz-color-base-400">Sector 7 • Waiting 1.2 mins</div>
+                </div>
+                <RadzenButton Text="DISPATCH NEAREST UNIT" ButtonStyle="ButtonStyle.Primary" Size="ButtonSize.Small" />
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: #1e293b; border-radius: 6px;">
+                <div>
+                    <strong>INC-1005: Multi-Vehicle Collision</strong>
+                    <div class="rz-text-caption rz-color-base-400">Highway 101 North • Waiting 0.5 mins</div>
+                </div>
+                <RadzenButton Text="DISPATCH NEAREST UNIT" ButtonStyle="ButtonStyle.Primary" Size="ButtonSize.Small" />
+            </div>
+        </div>
+    </RadzenCard>
+</div>

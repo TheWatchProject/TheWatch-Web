@@ -1,0 +1,23 @@
+<span class="watch-badge @GetBadgeClass()">
+    @if (ShowDot)
+    {
+        <span style="width: 6px; height: 6px; border-radius: 50%; background: currentColor;"></span>
+    }
+    @Text
+</span>
+
+@code {
+    [Parameter] public string Text { get; set; } = "ACTIVE";
+    [Parameter] public string Color { get; set; } = "green"; // red, green, blue, amber, purple
+    [Parameter] public bool ShowDot { get; set; } = true;
+
+    private string GetBadgeClass() => Color.ToLower() switch
+    {
+        "red" => "watch-badge-red",
+        "green" => "watch-badge-green",
+        "blue" => "watch-badge-blue",
+        "amber" => "watch-badge-amber",
+        "purple" => "watch-badge-purple",
+        _ => "watch-badge-blue"
+    };
+}

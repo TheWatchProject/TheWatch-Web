@@ -1,0 +1,132 @@
+@namespace TheWatch.UI.RazorComponents.Components
+
+<div class="decoy-calc">
+    <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: #555; margin-bottom: 8px;">
+        <span>Calculator</span>
+        <span style="cursor: pointer;" @onclick="OnExitClicked">Exit 🗙</span>
+    </div>
+
+    <div class="decoy-screen">
+        @_display
+    </div>
+
+    <div class="decoy-btn-grid">
+        <button class="decoy-btn decoy-btn-fn" @onclick="Clear">AC</button>
+        <button class="decoy-btn decoy-btn-fn" @onclick="ToggleSign">±</button>
+        <button class="decoy-btn decoy-btn-fn" @onclick="Percent">%</button>
+        <button class="decoy-btn decoy-btn-op" @onclick='() => SetOp("/")'>÷</button>
+
+        <button class="decoy-btn decoy-btn-num" @onclick='() => PressNum("7")'>7</button>
+        <button class="decoy-btn decoy-btn-num" @onclick='() => PressNum("8")'>8</button>
+        <button class="decoy-btn decoy-btn-num" @onclick='() => PressNum("9")'>9</button>
+        <button class="decoy-btn decoy-btn-op" @onclick='() => SetOp("*")'>×</button>
+
+        <button class="decoy-btn decoy-btn-num" @onclick='() => PressNum("4")'>4</button>
+        <button class="decoy-btn decoy-btn-num" @onclick='() => PressNum("5")'>5</button>
+        <button class="decoy-btn decoy-btn-num" @onclick='() => PressNum("6")'>6</button>
+        <button class="decoy-btn decoy-btn-op" @onclick='() => SetOp("-")'>−</button>
+
+        <button class="decoy-btn decoy-btn-num" @onclick='() => PressNum("1")'>1</button>
+        <button class="decoy-btn decoy-btn-num" @onclick='() => PressNum("2")'>2</button>
+        <button class="decoy-btn decoy-btn-num" @onclick='() => PressNum("3")'>3</button>
+        <button class="decoy-btn decoy-btn-op" @onclick='() => SetOp("+")'>+</button>
+
+        <button class="decoy-btn decoy-btn-num" style="grid-column: span 2; border-radius: 40px; justify-content: flex-start; padding-left: 28px;" @onclick='() => PressNum("0")'>0</button>
+        <button class="decoy-btn decoy-btn-num" @onclick='() => PressNum(".")'>.</button>
+        <button class="decoy-btn decoy-btn-op" @onclick="Calculate">=</button>
+    </div>
+
+    @if (_showSilentConfirmation)
+    {
+        <div style="margin-top: 16px; font-size: 0.72rem; color: #4ade80; text-align: center;">
+            ✓ Silent Beacon Dispatched
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter] public string DecoySecretCode { get; set; } = "9110";
+    [Parameter] public EventCallback OnExit { get; set; }
+    [Parameter] public EventCallback<string> OnSecretCodeEntered { get; set; }
+
+    private string _display = "0";
+    private string _currentInput = "";
+    private double _firstOperand = 0;
+    private string _operator = "";
+    private bool _showSilentConfirmation = false;
+
+    private async Task OnExitClicked()
+    {
+        if (OnExit.HasDelegate)
+            await OnExit.InvokeAsync();
+    }
+
+    private async Task PressNum(string num)
+    {
+        if (_display == "0" || _currentInput == "")
+            _display = num;
+        else
+            _display += num;
+
+        _currentInput += num;
+
+        // Check if entered decoy secret code (e.g. 9110)
+        if (!string.IsNullOrEmpty(DecoySecretCode) && _currentInput.EndsWith(DecoySecretCode))
+        {
+            if (OnSecretCodeEntered.HasDelegate)
+                await OnSecretCodeEntered.InvokeAsync(_currentInput);
+
+            _showSilentConfirmation = true;
+            _ = Task.Delay(3000).ContinueWith(_ => { _showSilentConfirmation = false; InvokeAsync(StateHasChanged); });
+        }
+    }
+
+    private void Clear()
+    {
+        _display = "0";
+        _currentInput = "";
+        _firstOperand = 0;
+        _operator = "";
+    }
+
+    private void ToggleSign()
+    {
+        if (double.TryParse(_display, out var val))
+            _display = (-val).ToString();
+    }
+
+    private void Percent()
+    {
+        if (double.TryParse(_display, out var val))
+            _display = (val / 100.0).ToString();
+    }
+
+    private void SetOp(string op)
+    {
+        if (double.TryParse(_display, out var val))
+        {
+            _firstOperand = val;
+            _operator = op;
+            _currentInput = "";
+        }
+    }
+
+    private void Calculate()
+    {
+        if (double.TryParse(_display, out var secondOperand) && !string.IsNullOrEmpty(_operator))
+        {
+            double res = _operator switch
+            {
+                "+" => _firstOperand + secondOperand,
+                "-" => _firstOperand - secondOperand,
+                "*" => _firstOperand * secondOperand,
+                "/" => secondOperand != 0 ? _firstOperand / secondOperand : 0,
+                _ => secondOperand
+            };
+
+            _display = res.ToString();
+            _operator = "";
+            _currentInput = "";
+        }
+    }
+}

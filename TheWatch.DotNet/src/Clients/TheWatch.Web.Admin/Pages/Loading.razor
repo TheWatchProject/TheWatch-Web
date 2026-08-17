@@ -1,0 +1,32 @@
+@page "/loading"
+@using System.Net.Http
+@inject NavigationManager Navigation
+@inject HttpClient Http
+
+<h3>Loading...</h3>
+<p>Performing startup checks...</p>
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        // Example: ping health endpoint
+        try
+        {
+            var response = await Http.GetAsync("/healthz");
+            if (response.IsSuccessStatusCode)
+            {
+                // Continue to dashboard if healthy
+                Navigation.NavigateTo("/dashboard");
+            }
+            else
+            {
+                // Show error (simplified)
+                Navigation.NavigateTo("/error");
+            }
+        }
+        catch
+        {
+            Navigation.NavigateTo("/error");
+        }
+    }
+}

@@ -1,0 +1,141 @@
+@namespace TheWatch.UI.RazorComponents.Components
+
+<div class="watch-activity-feed @CssClass">
+    <div class="feed-header">
+        <h4 class="feed-title">@Title</h4>
+        <span class="feed-badge">Live Stream</span>
+    </div>
+
+    @if (Activities != null && Activities.Any())
+    {
+        <ul class="feed-list">
+            @foreach (var act in Activities)
+            {
+                <li class="feed-item">
+                    <div class="feed-item-icon-wrapper @act.SeverityClass">
+                        <span>@act.Icon</span>
+                    </div>
+                    <div class="feed-item-content">
+                        <div class="feed-item-header">
+                            <span class="feed-actor">@act.Actor</span>
+                            <span class="feed-time">@act.Timestamp</span>
+                        </div>
+                        <p class="feed-message">@act.Message</p>
+                    </div>
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+        <div class="feed-empty">No recent operational activity events recorded.</div>
+    }
+</div>
+
+<style>
+    .watch-activity-feed {
+        background: #1e293b;
+        border: 1px solid #334155;
+        border-radius: 0.75rem;
+        padding: 1.25rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    .feed-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.25rem;
+    }
+    .feed-title {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #f8fafc;
+        margin: 0;
+    }
+    .feed-badge {
+        font-size: 0.7rem;
+        font-weight: 600;
+        padding: 0.2rem 0.5rem;
+        border-radius: 9999px;
+        background: rgba(56, 189, 248, 0.15);
+        color: #38bdf8;
+        border: 1px solid rgba(56, 189, 248, 0.3);
+    }
+    .feed-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+    .feed-item {
+        display: flex;
+        gap: 0.875rem;
+        align-items: flex-start;
+    }
+    .feed-item-icon-wrapper {
+        width: 2rem;
+        height: 2rem;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.9rem;
+        flex-shrink: 0;
+    }
+    .feed-item-icon-wrapper.info {
+        background: rgba(56, 189, 248, 0.2);
+        color: #38bdf8;
+    }
+    .feed-item-icon-wrapper.warning {
+        background: rgba(245, 158, 11, 0.2);
+        color: #fbbf24;
+    }
+    .feed-item-icon-wrapper.critical {
+        background: rgba(239, 68, 68, 0.2);
+        color: #f87171;
+    }
+    .feed-item-content {
+        flex: 1;
+    }
+    .feed-item-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+    }
+    .feed-actor {
+        font-weight: 600;
+        font-size: 0.875rem;
+        color: #f1f5f9;
+    }
+    .feed-time {
+        font-size: 0.75rem;
+        color: #64748b;
+    }
+    .feed-message {
+        margin: 0.25rem 0 0 0;
+        font-size: 0.825rem;
+        color: #94a3b8;
+        line-height: 1.4;
+    }
+    .feed-empty {
+        padding: 1.5rem;
+        text-align: center;
+        color: #64748b;
+        font-size: 0.875rem;
+    }
+</style>
+
+@code {
+    [Parameter]
+    public string Title { get; set; } = "Operational CAD Event Activity";
+
+    [Parameter]
+    public IEnumerable<FeedActivityItem>? Activities { get; set; }
+
+    [Parameter]
+    public string? CssClass { get; set; }
+
+    public sealed record FeedActivityItem(string Actor, string Message, string Timestamp, string Icon = "⚡", string SeverityClass = "info");
+}

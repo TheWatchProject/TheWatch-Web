@@ -1,0 +1,98 @@
+@namespace TheWatch.UI.RazorComponents.Components
+
+<div class="watch-stats-grid @CssClass">
+    @if (Stats != null)
+    {
+        <div class="stats-row">
+            @foreach (var item in Stats)
+            {
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-label">@item.Label</span>
+                        @if (!string.IsNullOrEmpty(item.Change))
+                        {
+                            <span class="stat-badge @(item.IsPositive ? "positive" : "negative")">
+                                @(item.IsPositive ? "↑" : "↓") @item.Change
+                            </span>
+                        }
+                    </div>
+                    <div class="stat-value">@item.Value</div>
+                    @if (!string.IsNullOrEmpty(item.Subtext))
+                    {
+                        <div class="stat-subtext">@item.Subtext</div>
+                    }
+                </div>
+            }
+        </div>
+    }
+</div>
+
+<style>
+    .watch-stats-grid {
+        width: 100%;
+        margin-bottom: 1.5rem;
+    }
+    .stats-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 1rem;
+    }
+    .stat-card {
+        background: #1e293b;
+        border: 1px solid #334155;
+        border-radius: 0.75rem;
+        padding: 1.25rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+    .stat-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.5rem;
+    }
+    .stat-label {
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: #94a3b8;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+    .stat-badge {
+        font-size: 0.75rem;
+        font-weight: 600;
+        padding: 0.25rem 0.5rem;
+        border-radius: 9999px;
+    }
+    .stat-badge.positive {
+        background: rgba(16, 185, 129, 0.2);
+        color: #34d399;
+    }
+    .stat-badge.negative {
+        background: rgba(239, 68, 68, 0.2);
+        color: #f87171;
+    }
+    .stat-value {
+        font-size: 1.875rem;
+        font-weight: 700;
+        color: #f8fafc;
+        line-height: 1.2;
+    }
+    .stat-subtext {
+        font-size: 0.75rem;
+        color: #64748b;
+        margin-top: 0.35rem;
+    }
+</style>
+
+@code {
+    [Parameter]
+    public IEnumerable<StatItem>? Stats { get; set; }
+
+    [Parameter]
+    public string? CssClass { get; set; }
+
+    public sealed record StatItem(string Label, string Value, string? Change = null, bool IsPositive = true, string? Subtext = null);
+}

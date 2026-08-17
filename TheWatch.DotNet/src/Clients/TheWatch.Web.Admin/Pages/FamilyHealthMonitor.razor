@@ -1,0 +1,99 @@
+@page "/family-health"
+@using TheWatch.Contracts
+@using static TheWatch.Contracts.FamilyHealthContracts
+
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="h3 fw-bold mb-1">👨‍👩‍👧‍👦 Family Circle & Dependent Safety Monitor</h2>
+            <p class="text-muted small mb-0">Real-time safe zone geofencing, elderly fall prevention, and chronic condition telemetry.</p>
+        </div>
+        <span class="badge bg-success px-3 py-2">Circle Status: SECURE</span>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
+                    <h5 class="card-title fw-bold mb-0">Protected Family Members</h5>
+                    <button class="btn btn-sm btn-outline-primary" @onclick="SimulateGeofenceCheck">+ Refresh Location Pings</button>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Member</th>
+                                    <th>Role</th>
+                                    <th>Vulnerability Tier</th>
+                                    <th>Last Known Coordinate</th>
+                                    <th>Geofence Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var m in _members)
+                                {
+                                    <tr>
+                                        <td>
+                                            <div class="fw-bold">@m.FullName</div>
+                                            <small class="text-muted">@m.EmergencyContactPhone</small>
+                                        </td>
+                                        <td><span class="badge bg-secondary">@m.Role</span></td>
+                                        <td><span class="badge bg-warning text-dark">@m.Vulnerability</span></td>
+                                        <td><code>@m.CurrentLatitude.ToString("F4"), @m.CurrentLongitude.ToString("F4")</code></td>
+                                        <td><span class="badge bg-success">Inside Home Safe Zone</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-info">Track GPS</button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-header bg-white py-3 border-bottom">
+                    <h5 class="card-title fw-bold mb-0">Active Safe Zones</h5>
+                </div>
+                <div class="card-body">
+                    @foreach (var z in _safeZones)
+                    {
+                        <div class="p-3 border rounded mb-3 bg-light">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <h6 class="fw-bold mb-0">@z.ZoneName</h6>
+                                <span class="badge bg-primary">Radius: @z.RadiusMeters m</span>
+                            </div>
+                            <small class="text-muted d-block">Center: @z.CenterLatitude, @z.CenterLongitude</small>
+                            <small class="text-muted">Alerts: @(z.NotifyOnExit ? "Exit Notification ON" : "None")</small>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private List<FamilyCircleMember> _members = new()
+    {
+        new FamilyCircleMember("FAM-01", "CIRCLE-1", "Eleanor Vance (Grandmother)", "Dependent", DependentVulnerabilityLevel.ElderlyFallRisk, "+1-415-555-0199", 37.7749, -122.4194, DateTime.UtcNow),
+        new FamilyCircleMember("FAM-02", "CIRCLE-1", "Liam Vance (Child)", "Dependent", DependentVulnerabilityLevel.Pediatric, "+1-415-555-0199", 37.7752, -122.4188, DateTime.UtcNow),
+        new FamilyCircleMember("FAM-03", "CIRCLE-1", "Marcus Vance", "Guardian", DependentVulnerabilityLevel.Standard, "+1-415-555-0101", 37.7800, -122.4150, DateTime.UtcNow)
+    };
+
+    private List<FamilySafeZone> _safeZones = new()
+    {
+        new FamilySafeZone("ZONE-01", "CIRCLE-1", "Home Safe Zone (Vance Residence)", 37.7749, -122.4194, 250.0, true, true),
+        new FamilySafeZone("ZONE-02", "CIRCLE-1", "Elementary School Campus", 37.7820, -122.4210, 400.0, true, true)
+    };
+
+    private void SimulateGeofenceCheck()
+    {
+        // Periodic refresh simulation
+    }
+}

@@ -1,0 +1,34 @@
+@using Radzen.Blazor
+
+<div class="evacuation-card rz-p-4 rz-border-radius-2" style="background: #1e293b; border: 1px solid #334155;">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+        <div>
+            <div style="font-size: 0.75rem; color: #94a3b8; text-transform: uppercase;">Active Evacuation Route</div>
+            <div style="font-weight: 700; color: #f8fafc; font-size: 1.1rem; margin-top: 2px;">@DestinationShelterName</div>
+        </div>
+        <div style="text-align: right;">
+            <div style="font-size: 1.25rem; font-weight: 800; color: #10b981;">@EtaMinutes min</div>
+            <div style="font-size: 0.75rem; color: #94a3b8;">@DistanceKm.ToString("F1") km remaining</div>
+        </div>
+    </div>
+
+    <!-- Progress Bar -->
+    <div style="margin-top: 14px; background: #0f172a; height: 8px; border-radius: 9999px; overflow: hidden;">
+        <div style="width: @(ProgressPercent)%; height: 100%; background: #10b981; border-radius: 9999px;"></div>
+    </div>
+
+    <div style="display: flex; justify-content: space-between; margin-top: 12px; font-size: 0.8rem; color: #cbd5e1;">
+        <div>Shelter Capacity: <span style="font-weight: 600; color: #38bdf8;">@ShelterAvailableBeds / @ShelterTotalBeds Beds</span></div>
+        <div>Hazards on Route: <span style="font-weight: 600; color: @(HazardsCount > 0 ? "#ef4444" : "#10b981");">@HazardsCount</span></div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public string DestinationShelterName { get; set; } = "Civic Center Emergency Shelter";
+    [Parameter] public int EtaMinutes { get; set; } = 18;
+    [Parameter] public double DistanceKm { get; set; } = 12.4;
+    [Parameter] public int ProgressPercent { get; set; } = 65;
+    [Parameter] public int ShelterAvailableBeds { get; set; } = 142;
+    [Parameter] public int ShelterTotalBeds { get; set; } = 300;
+    [Parameter] public int HazardsCount { get; set; } = 0;
+}

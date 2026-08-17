@@ -1,0 +1,25 @@
+<div style="background: var(--watch-bg-card); border: 1px solid var(--watch-border); border-radius: 12px; padding: 14px 16px; display: flex; align-items: center; gap: 14px;">
+    <div style="width: 42px; height: 42px; border-radius: 10px; background: @GetIconBackground(); display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
+        @Icon
+    </div>
+    <div>
+        <div style="font-size: 0.72rem; color: var(--watch-text-secondary); text-transform: uppercase; font-weight: 600; letter-spacing: 0.04em;">@Title</div>
+        <div style="font-size: 1.2rem; font-weight: 700; color: var(--watch-text-primary); margin-top: 2px;">@Value</div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public string Icon { get; set; } = "📊";
+    [Parameter] public string Title { get; set; } = "Metric";
+    [Parameter] public string Value { get; set; } = "0";
+    [Parameter] public string Color { get; set; } = "blue";
+
+    private string GetIconBackground() => Color.ToLower() switch
+    {
+        "red" => "rgba(220, 38, 38, 0.18)",
+        "green" => "rgba(16, 185, 129, 0.18)",
+        "amber" => "rgba(217, 119, 6, 0.18)",
+        "purple" => "rgba(124, 58, 237, 0.18)",
+        _ => "rgba(37, 99, 235, 0.18)"
+    };
+}

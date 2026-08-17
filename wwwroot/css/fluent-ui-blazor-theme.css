@@ -1,0 +1,575 @@
+/*
+ * ============================================================
+ *  FluentUI Blazor — Custom Theme Sheet
+ *  Extracted from: Anatomy of a Microservice Presentation
+ *  Theme: Dark Navy / Electric Blue (Developer Tooling)
+ *  Generated: 2026-08-14
+ * ============================================================
+ *
+ *  USAGE:
+ *  1. Add this file to your Blazor project: wwwroot/css/fluent-ui-blazor-theme.css
+ *  2. Reference it in index.html / App.razor AFTER the FluentUI stylesheet:
+ *       <link rel="stylesheet" href="_content/Microsoft.FluentUI.AspNetCore.Components/css/reboot.css" />
+ *       <link rel="stylesheet" href="css/fluent-ui-blazor-theme.css" />
+ *  3. Wrap your app shell in <FluentDesignTheme Mode="DesignThemeModes.Dark" /> or
+ *     apply the CSS variables below to :root for full override.
+ * ============================================================
+ */
+
+
+/* ============================================================
+   1. DESIGN TOKENS — Core Color Palette (60-30-10 Rule)
+   ============================================================ */
+
+:root {
+
+    /* --- 60% Background --- */
+    --background-color:             #0F172A;   /* Deep navy — primary slide background */
+    --background-secondary:         #1E293B;   /* Slate — cards, containers, panels */
+    --background-tertiary:          #263348;   /* Slightly lighter — hover states, nested panels */
+
+    /* --- Ink / Text --- */
+    --ink-primary:                  #F1F5F9;   /* Near-white — headings, primary body text */
+    --ink-secondary:                #94A3B8;   /* Muted slate — subtitles, captions, metadata */
+    --ink-disabled:                 #475569;   /* Dimmed — disabled labels, placeholder text */
+
+    /* --- 30% Primary Brand --- */
+    --primary-color:                #3B82F6;   /* Electric blue — borders, icon fills, decorative */
+    --primary-color-hover:          #2563EB;   /* Darker blue — hover state */
+    --primary-color-active:         #1D4ED8;   /* Pressed state */
+    --primary-color-subtle:         rgba(59, 130, 246, 0.12);  /* Tinted backgrounds */
+    --primary-color-border:         rgba(59, 130, 246, 0.25);  /* Subtle borders */
+
+    /* --- 10% Accents --- */
+    --accent-1:                     #60A5FA;   /* Light blue — highlights, active indicators */
+    --accent-2:                     #34D399;   /* Emerald green — success, positive metrics */
+    --accent-3:                     #F59E0B;   /* Amber — warnings, callouts, tertiary badges */
+    --accent-4:                     #A78BFA;   /* Violet — 5th category color */
+    --accent-5:                     #F472B6;   /* Pink — 6th category color */
+
+    /* --- Semantic Colors --- */
+    --color-success:                #34D399;
+    --color-warning:                #F59E0B;
+    --color-error:                  #F87171;
+    --color-info:                   #60A5FA;
+
+    /* --- Borders & Dividers --- */
+    --border-subtle:                rgba(255, 255, 255, 0.07);
+    --border-default:               rgba(255, 255, 255, 0.12);
+    --border-strong:                rgba(255, 255, 255, 0.20);
+    --border-accent:                rgba(59, 130, 246, 0.30);
+
+
+    /* ============================================================
+       2. TYPOGRAPHY
+       ============================================================ */
+
+    --font-heading:                 'Space Grotesk', 'Segoe UI', system-ui, sans-serif;
+    --font-body:                    'DM Sans', 'Segoe UI', system-ui, sans-serif;
+    --font-mono:                    'JetBrains Mono', 'Cascadia Code', 'Consolas', monospace;
+
+    /* Scale (base: 1rem = 16px) */
+    --font-size-xs:                 0.72rem;   /* 11.5px — labels, badges, eyebrows */
+    --font-size-sm:                 0.85rem;   /* 13.6px — captions, metadata */
+    --font-size-base:               1rem;      /* 16px   — body text */
+    --font-size-md:                 1.1rem;    /* 17.6px — emphasized body */
+    --font-size-lg:                 1.3rem;    /* 20.8px — card titles, section headers */
+    --font-size-xl:                 1.75rem;   /* 28px   — page sub-headings */
+    --font-size-2xl:                2.25rem;   /* 36px   — page headings */
+    --font-size-3xl:                2.8rem;    /* 44.8px — hero / slide headings */
+
+    --font-weight-regular:          400;
+    --font-weight-medium:           500;
+    --font-weight-semibold:         600;
+    --font-weight-bold:             700;
+    --font-weight-extrabold:        800;
+
+    --line-height-tight:            1.05;
+    --line-height-snug:             1.25;
+    --line-height-normal:           1.45;
+    --line-height-relaxed:          1.65;
+
+    --letter-spacing-tight:         -0.02em;
+    --letter-spacing-normal:        0em;
+    --letter-spacing-wide:          0.06em;
+    --letter-spacing-wider:         0.10em;
+    --letter-spacing-widest:        0.14em;
+
+
+    /* ============================================================
+       3. SPACING & LAYOUT
+       ============================================================ */
+
+    --space-1:                      0.25rem;   /* 4px  */
+    --space-2:                      0.5rem;    /* 8px  */
+    --space-3:                      0.75rem;   /* 12px */
+    --space-4:                      1rem;      /* 16px */
+    --space-5:                      1.25rem;   /* 20px */
+    --space-6:                      1.5rem;    /* 24px */
+    --space-8:                      2rem;      /* 32px */
+    --space-10:                     2.5rem;    /* 40px */
+    --space-12:                     3rem;      /* 48px */
+
+    --radius-sm:                    0.375rem;  /* 6px  — badges, tags */
+    --radius-md:                    0.625rem;  /* 10px — cards, inputs */
+    --radius-lg:                    0.75rem;   /* 12px — panels, dialogs */
+    --radius-xl:                    1rem;      /* 16px — modals, drawers */
+    --radius-full:                  9999px;    /* pills, avatars */
+
+
+    /* ============================================================
+       4. ELEVATION / SHADOWS
+       ============================================================ */
+
+    --shadow-sm:                    0 1px 3px rgba(0, 0, 0, 0.4);
+    --shadow-md:                    0 4px 12px rgba(0, 0, 0, 0.5);
+    --shadow-lg:                    0 8px 24px rgba(0, 0, 0, 0.6);
+    --shadow-glow-blue:             0 0 20px rgba(59, 130, 246, 0.15);
+    --shadow-glow-green:            0 0 20px rgba(52, 211, 153, 0.12);
+    --shadow-card:                  0 2px 8px rgba(0, 0, 0, 0.45),
+                                    0 0 0 1px rgba(255, 255, 255, 0.06);
+
+
+    /* ============================================================
+       5. FLUENT UI BLAZOR — DESIGN SYSTEM VARIABLE OVERRIDES
+       Maps presentation tokens → FluentUI's own CSS custom properties
+       ============================================================ */
+
+    /* Neutral palette */
+    --neutral-fill-rest:            var(--background-secondary);
+    --neutral-fill-hover:           var(--background-tertiary);
+    --neutral-fill-active:          #2D3F58;
+    --neutral-fill-focus:           var(--background-tertiary);
+    --neutral-fill-stealth-rest:    transparent;
+    --neutral-fill-stealth-hover:   rgba(255, 255, 255, 0.05);
+    --neutral-fill-stealth-active:  rgba(255, 255, 255, 0.08);
+
+    --neutral-foreground-rest:      var(--ink-primary);
+    --neutral-foreground-hint:      var(--ink-secondary);
+    --neutral-foreground-disabled:  var(--ink-disabled);
+
+    --neutral-stroke-rest:          var(--border-default);
+    --neutral-stroke-hover:         var(--border-strong);
+    --neutral-stroke-active:        var(--border-accent);
+    --neutral-stroke-focus-inner:   var(--primary-color);
+    --neutral-stroke-focus-outer:   rgba(59, 130, 246, 0.4);
+
+    /* Accent / brand */
+    --accent-fill-rest:             var(--primary-color);
+    --accent-fill-hover:            var(--primary-color-hover);
+    --accent-fill-active:           var(--primary-color-active);
+    --accent-foreground-rest:       var(--ink-primary);
+    --accent-foreground-cut:        #FFFFFF;
+
+    /* Layer backgrounds */
+    --layer-fill-fixed-base:        var(--background-color);
+    --layer-fill-base:              var(--background-color);
+    --layer-fill-rest:              var(--background-secondary);
+    --layer-fill-hover:             var(--background-tertiary);
+
+    /* Density */
+    --design-unit:                  4;
+    --base-height-multiplier:       8;
+    --base-horizontal-spacing-multiplier: 3;
+    --density:                      0;
+    --corner-radius:                10;        /* maps to --radius-md */
+    --focus-stroke-width:           2;
+
+    /* Type ramp — FluentUI naming convention */
+    --type-ramp-base-font-size:     var(--font-size-base);
+    --type-ramp-base-line-height:   var(--line-height-normal);
+    --type-ramp-minus-1-font-size:  var(--font-size-sm);
+    --type-ramp-minus-2-font-size:  var(--font-size-xs);
+    --type-ramp-plus-1-font-size:   var(--font-size-md);
+    --type-ramp-plus-2-font-size:   var(--font-size-lg);
+    --type-ramp-plus-3-font-size:   var(--font-size-xl);
+    --type-ramp-plus-4-font-size:   var(--font-size-2xl);
+    --type-ramp-plus-5-font-size:   var(--font-size-3xl);
+    --type-ramp-plus-6-font-size:   3.5rem;
+}
+
+
+/* ============================================================
+   6. BASE RESET & GLOBAL STYLES
+   ============================================================ */
+
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--background-color);
+    color: var(--ink-primary);
+    font-family: var(--font-body);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-regular);
+    line-height: var(--line-height-normal);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    font-weight: var(--font-weight-bold);
+    color: var(--ink-primary);
+    letter-spacing: var(--letter-spacing-tight);
+    line-height: var(--line-height-tight);
+    margin: 0;
+}
+
+h1 { font-size: var(--font-size-3xl); }
+h2 { font-size: var(--font-size-2xl); }
+h3 { font-size: var(--font-size-xl); }
+h4 { font-size: var(--font-size-lg); }
+h5 { font-size: var(--font-size-md); }
+h6 { font-size: var(--font-size-base); }
+
+p {
+    margin: 0 0 var(--space-4);
+    color: var(--ink-primary);
+    line-height: var(--line-height-relaxed);
+}
+
+a {
+    color: var(--accent-1);
+    text-decoration: none;
+    transition: color 0.15s ease;
+}
+
+a:hover {
+    color: var(--primary-color);
+    text-decoration: underline;
+}
+
+code, pre {
+    font-family: var(--font-mono);
+    font-size: var(--font-size-sm);
+    background: var(--background-secondary);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+}
+
+code {
+    padding: 0.15em 0.4em;
+    color: var(--accent-1);
+}
+
+pre {
+    padding: var(--space-4);
+    overflow-x: auto;
+    color: var(--ink-primary);
+}
+
+
+/* ============================================================
+   7. FLUENT UI COMPONENT OVERRIDES
+   ============================================================ */
+
+/* --- FluentButton --- */
+fluent-button,
+.fluent-button {
+    --accent-fill-rest:             var(--primary-color);
+    --accent-fill-hover:            var(--primary-color-hover);
+    --accent-fill-active:           var(--primary-color-active);
+    --neutral-fill-rest:            var(--background-secondary);
+    --neutral-fill-hover:           var(--background-tertiary);
+    --corner-radius:                8;
+    font-family: var(--font-body);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: var(--letter-spacing-wide);
+}
+
+/* --- FluentCard --- */
+fluent-card,
+.fluent-card {
+    background: var(--background-secondary);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+    padding: var(--space-6);
+    color: var(--ink-primary);
+}
+
+fluent-card:hover,
+.fluent-card:hover {
+    border-color: var(--border-accent);
+    box-shadow: var(--shadow-glow-blue);
+}
+
+/* --- FluentTextField / FluentTextArea --- */
+fluent-text-field,
+fluent-text-area,
+.fluent-text-field,
+.fluent-text-area {
+    --neutral-fill-rest:            var(--background-secondary);
+    --neutral-fill-hover:           var(--background-tertiary);
+    --neutral-stroke-rest:          var(--border-default);
+    --neutral-stroke-hover:         var(--border-accent);
+    --neutral-foreground-rest:      var(--ink-primary);
+    --neutral-foreground-hint:      var(--ink-secondary);
+    font-family: var(--font-body);
+    border-radius: var(--radius-md);
+}
+
+/* --- FluentSelect / FluentCombobox --- */
+fluent-select,
+fluent-combobox,
+.fluent-select {
+    --neutral-fill-rest:            var(--background-secondary);
+    --neutral-stroke-rest:          var(--border-default);
+    --neutral-foreground-rest:      var(--ink-primary);
+    font-family: var(--font-body);
+}
+
+/* --- FluentBadge --- */
+fluent-badge,
+.fluent-badge {
+    font-family: var(--font-body);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: var(--letter-spacing-wide);
+    text-transform: uppercase;
+    border-radius: var(--radius-full);
+    padding: var(--space-1) var(--space-3);
+}
+
+/* Badge color variants */
+.badge-blue   { background: var(--primary-color-subtle); color: var(--accent-1); border: 1px solid var(--primary-color-border); }
+.badge-green  { background: rgba(52, 211, 153, 0.12);    color: var(--accent-2); border: 1px solid rgba(52, 211, 153, 0.25); }
+.badge-amber  { background: rgba(245, 158, 11, 0.12);    color: var(--accent-3); border: 1px solid rgba(245, 158, 11, 0.25); }
+.badge-violet { background: rgba(167, 139, 250, 0.12);   color: var(--accent-4); border: 1px solid rgba(167, 139, 250, 0.25); }
+.badge-pink   { background: rgba(244, 114, 182, 0.12);   color: var(--accent-5); border: 1px solid rgba(244, 114, 182, 0.25); }
+
+/* --- FluentNavMenu / FluentNavItem --- */
+fluent-nav-menu,
+.fluent-nav-menu {
+    background: var(--background-secondary);
+    border-right: 1px solid var(--border-subtle);
+}
+
+fluent-nav-item[aria-current="page"],
+.fluent-nav-item.active {
+    background: var(--primary-color-subtle);
+    border-left: 3px solid var(--primary-color);
+    color: var(--accent-1);
+}
+
+/* --- FluentDataGrid --- */
+fluent-data-grid,
+.fluent-data-grid {
+    --neutral-fill-rest:            var(--background-secondary);
+    --neutral-stroke-rest:          var(--border-subtle);
+    --neutral-foreground-rest:      var(--ink-primary);
+    font-family: var(--font-body);
+    font-size: var(--font-size-sm);
+}
+
+fluent-data-grid-row:hover,
+.fluent-data-grid-row:hover {
+    background: var(--background-tertiary);
+}
+
+fluent-data-grid-cell[grid-column],
+.fluent-data-grid-cell {
+    border-bottom: 1px solid var(--border-subtle);
+    padding: var(--space-3) var(--space-4);
+    color: var(--ink-primary);
+}
+
+/* --- FluentDialog --- */
+fluent-dialog,
+.fluent-dialog {
+    --layer-fill-fixed-base:        var(--background-secondary);
+    --neutral-stroke-rest:          var(--border-default);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-lg);
+}
+
+/* --- FluentTooltip --- */
+fluent-tooltip,
+.fluent-tooltip {
+    background: var(--background-tertiary);
+    border: 1px solid var(--border-default);
+    color: var(--ink-primary);
+    font-family: var(--font-body);
+    font-size: var(--font-size-sm);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-md);
+}
+
+/* --- FluentProgressRing / FluentProgress --- */
+fluent-progress-ring,
+fluent-progress {
+    --accent-fill-rest:             var(--primary-color);
+    --neutral-fill-rest:            var(--background-tertiary);
+}
+
+/* --- FluentTabs / FluentTab --- */
+fluent-tabs,
+.fluent-tabs {
+    --neutral-fill-rest:            transparent;
+    --neutral-stroke-rest:          var(--border-subtle);
+    font-family: var(--font-body);
+}
+
+fluent-tab[aria-selected="true"],
+.fluent-tab.active {
+    color: var(--accent-1);
+    border-bottom: 2px solid var(--primary-color);
+    font-weight: var(--font-weight-semibold);
+}
+
+/* --- FluentAccordion --- */
+fluent-accordion-item,
+.fluent-accordion-item {
+    background: var(--background-secondary);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--space-2);
+}
+
+/* --- FluentDivider --- */
+fluent-divider,
+.fluent-divider {
+    --neutral-stroke-rest:          var(--border-subtle);
+}
+
+
+/* ============================================================
+   8. UTILITY CLASSES
+   ============================================================ */
+
+/* Text colors */
+.text-primary    { color: var(--ink-primary); }
+.text-secondary  { color: var(--ink-secondary); }
+.text-disabled   { color: var(--ink-disabled); }
+.text-accent     { color: var(--accent-1); }
+.text-success    { color: var(--color-success); }
+.text-warning    { color: var(--color-warning); }
+.text-error      { color: var(--color-error); }
+
+/* Background fills */
+.bg-base         { background-color: var(--background-color); }
+.bg-secondary    { background-color: var(--background-secondary); }
+.bg-tertiary     { background-color: var(--background-tertiary); }
+.bg-accent-subtle{ background-color: var(--primary-color-subtle); }
+
+/* Borders */
+.border-subtle   { border: 1px solid var(--border-subtle); }
+.border-default  { border: 1px solid var(--border-default); }
+.border-accent   { border: 1px solid var(--border-accent); }
+.border-left-accent { border-left: 3px solid var(--primary-color); }
+
+/* Eyebrow / label text */
+.eyebrow {
+    font-family: var(--font-body);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    text-transform: uppercase;
+    letter-spacing: var(--letter-spacing-widest);
+    color: var(--accent-1);
+}
+
+/* Card accent left-border variants */
+.card-accent-blue   { border-left: 3px solid var(--primary-color); }
+.card-accent-green  { border-left: 3px solid var(--accent-2); }
+.card-accent-amber  { border-left: 3px solid var(--accent-3); }
+.card-accent-violet { border-left: 3px solid var(--accent-4); }
+.card-accent-pink   { border-left: 3px solid var(--accent-5); }
+
+/* Glow effects */
+.glow-blue  { box-shadow: var(--shadow-glow-blue); }
+.glow-green { box-shadow: var(--shadow-glow-green); }
+
+/* Gradient accent bar (top of card/panel) */
+.accent-bar-top {
+    position: absolute;
+    top: 0; left: 0;
+    width: 40%;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary-color), var(--accent-1));
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+
+/* Metric / KPI display */
+.metric-value {
+    font-family: var(--font-heading);
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-extrabold);
+    color: var(--accent-2);
+    letter-spacing: var(--letter-spacing-tight);
+    line-height: 1;
+}
+
+.metric-label {
+    font-family: var(--font-body);
+    font-size: var(--font-size-xs);
+    color: var(--ink-secondary);
+    text-transform: uppercase;
+    letter-spacing: var(--letter-spacing-wider);
+    margin-top: var(--space-1);
+}
+
+/* Icon circle (matches presentation card icons) */
+.icon-circle {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 1rem;
+    color: #fff;
+}
+
+.icon-circle-blue   { background: var(--primary-color); }
+.icon-circle-light  { background: var(--accent-1); }
+.icon-circle-green  { background: var(--accent-2); }
+.icon-circle-amber  { background: var(--accent-3); }
+.icon-circle-violet { background: var(--accent-4); }
+.icon-circle-pink   { background: var(--accent-5); }
+
+
+/* ============================================================
+   9. SCROLLBAR STYLING (Chromium / WebKit)
+   ============================================================ */
+
+::-webkit-scrollbar              { width: 6px; height: 6px; }
+::-webkit-scrollbar-track        { background: var(--background-color); }
+::-webkit-scrollbar-thumb        { background: var(--border-default); border-radius: var(--radius-full); }
+::-webkit-scrollbar-thumb:hover  { background: var(--primary-color); }
+
+
+/* ============================================================
+   10. FOCUS VISIBLE (Accessibility)
+   ============================================================ */
+
+:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+}
+
+
+/* ============================================================
+   11. RESPONSIVE BREAKPOINTS
+   ============================================================ */
+
+@media (max-width: 1280px) {
+    :root {
+        --font-size-3xl: 2.25rem;
+        --font-size-2xl: 1.75rem;
+    }
+}
+
+@media (max-width: 768px) {
+    :root {
+        --font-size-3xl: 1.75rem;
+        --font-size-2xl: 1.4rem;
+        --font-size-xl:  1.25rem;
+        --font-size-lg:  1.1rem;
+    }
+}

@@ -1,0 +1,38 @@
+@using Radzen.Blazor
+
+<div class="beacon-card rz-p-4 rz-border-radius-2" style="background: #1e293b; border: 1px solid #334155; display: flex; align-items: center; justify-content: space-between;">
+    <div style="display: flex; align-items: center; gap: 12px;">
+        <div style="position: relative; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; background: @(IsBeaconActive ? "rgba(16, 185, 129, 0.2)" : "rgba(100, 116, 139, 0.2)"); border-radius: 50%;">
+            <span style="width: 14px; height: 14px; border-radius: 50%; background: @(IsBeaconActive ? "#10b981" : "#64748b"); display: inline-block;"></span>
+        </div>
+        <div>
+            <div style="font-weight: 700; color: #f8fafc; font-size: 0.95rem;">@BeaconName</div>
+            <div style="font-size: 0.75rem; color: #94a3b8;">
+                Last Heartbeat: @LastHeartbeat.ToString("HH:mm:ss") UTC • Battery: <span style="color: @(BatteryPercent < 20 ? "#ef4444" : "#10b981"); font-weight: 600;">@BatteryPercent%</span>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <button class="rz-button rz-button-sm @(IsBeaconActive ? "rz-success" : "rz-secondary")" @onclick="SendCheckinPing">
+            @(IsBeaconActive ? "Active" : "Check In")
+        </button>
+    </div>
+</div>
+
+@code {
+    [Parameter] public string BeaconName { get; set; } = "Responder Safety Beacon";
+    [Parameter] public bool IsBeaconActive { get; set; } = true;
+    [Parameter] public DateTime LastHeartbeat { get; set; } = DateTime.UtcNow;
+    [Parameter] public int BatteryPercent { get; set; } = 84;
+    [Parameter] public EventCallback OnCheckinPing { get; set; }
+
+    private async Task SendCheckinPing()
+    {
+        LastHeartbeat = DateTime.UtcNow;
+        if (OnCheckinPing.HasDelegate)
+        {
+            await OnCheckinPing.InvokeAsync();
+        }
+    }
+}

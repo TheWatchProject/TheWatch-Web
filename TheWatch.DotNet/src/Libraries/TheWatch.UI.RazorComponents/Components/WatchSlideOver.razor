@@ -1,0 +1,110 @@
+@namespace TheWatch.UI.RazorComponents.Components
+
+@if (IsOpen)
+{
+    <div class="watch-slideover-backdrop" @onclick="CloseAsync">
+        <div class="watch-slideover-panel" @onclick:stopPropagation="true">
+            <div class="slideover-header">
+                <h3 class="slideover-title">@Title</h3>
+                <button type="button" class="slideover-close-btn" @onclick="CloseAsync">✕</button>
+            </div>
+            <div class="slideover-body">
+                @ChildContent
+            </div>
+            @if (FooterContent != null)
+            {
+                <div class="slideover-footer">
+                    @FooterContent
+                </div>
+            }
+        </div>
+    </div>
+}
+
+<style>
+    .watch-slideover-backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(15, 23, 42, 0.75);
+        backdrop-filter: blur(4px);
+        z-index: 9999;
+        display: flex;
+        justify-content: flex-end;
+    }
+    .watch-slideover-panel {
+        width: 100%;
+        max-width: 28rem;
+        background: #0f172a;
+        border-left: 1px solid #334155;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        box-shadow: -10px 0 25px -5px rgba(0, 0, 0, 0.5);
+        animation: slideIn 0.25s ease-out;
+    }
+    @@keyframes slideIn {
+        from { transform: translateX(100%); }
+        to { transform: translateX(0); }
+    }
+    .slideover-header {
+        padding: 1.25rem 1.5rem;
+        border-bottom: 1px solid #1e293b;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .slideover-title {
+        font-size: 1.125rem;
+        font-weight: 600;
+        color: #f8fafc;
+        margin: 0;
+    }
+    .slideover-close-btn {
+        background: transparent;
+        border: none;
+        color: #94a3b8;
+        font-size: 1.25rem;
+        cursor: pointer;
+        padding: 0.25rem;
+    }
+    .slideover-close-btn:hover {
+        color: #f8fafc;
+    }
+    .slideover-body {
+        padding: 1.5rem;
+        flex: 1;
+        overflow-y: auto;
+        color: #cbd5e1;
+    }
+    .slideover-footer {
+        padding: 1rem 1.5rem;
+        border-top: 1px solid #1e293b;
+        background: #0b0f19;
+        display: flex;
+        justify-content: flex-end;
+        gap: 0.75rem;
+    }
+</style>
+
+@code {
+    [Parameter]
+    public bool IsOpen { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> IsOpenChanged { get; set; }
+
+    [Parameter]
+    public string Title { get; set; } = "Incident Inspection Details";
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    [Parameter]
+    public RenderFragment? FooterContent { get; set; }
+
+    private async Task CloseAsync()
+    {
+        IsOpen = false;
+        await IsOpenChanged.InvokeAsync(false);
+    }
+}

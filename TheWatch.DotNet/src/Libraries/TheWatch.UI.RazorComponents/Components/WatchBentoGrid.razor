@@ -1,0 +1,22 @@
+@namespace TheWatch.UI.RazorComponents.Components
+
+<div class="watch-bento-grid @CssClass">
+    @ChildContent
+</div>
+
+<style>
+    .watch-bento-grid {
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        gap: 1.25rem;
+        width: 100%;
+    }
+</style>
+
+@code {
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    [Parameter]
+    public string? CssClass { get; set; }
+}

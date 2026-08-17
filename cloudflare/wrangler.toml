@@ -1,0 +1,19 @@
+name = "thewatch-web-portal"
+compatibility_date = "2026-08-17"
+pages_build_output_dir = "TheWatch.DotNet/docs"
+
+# Cloudflare Account Integration (broadsides22@gmail.com)
+[vars]
+ENVIRONMENT = "production"
+PORTAL_NAME = "The Watch Life-Safety & NAICS Portal"
+ACCOUNT_OWNER = "broadsides22@gmail.com"
+
+# Cloudflare R2 Zero-Egress Storage Binding for Video & Evidence
+[[r2_buckets]]
+binding = "THEWATCH_EVIDENCE_VAULT"
+bucket_name = "thewatch-evidence-vault"
+
+# Cloudflare KV for High-Speed Edge Threat Caching
+[[kv_namespaces]]
+binding = "THEWATCH_EDGE_CACHE"
+id = "thewatch_edge_cache_prod"

@@ -1,0 +1,105 @@
+@page "/drone-fleet"
+@using TheWatch.Contracts
+
+<div class="container-fluid p-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h2 class="text-primary fw-bold"><i class="bi bi-airplane-engines-fill me-2"></i>Autonomous First-Responder Drone Fleet</h2>
+            <p class="text-muted mb-0">AED Drone Dispatch, Thermal Imaging Video Streams & Autonomous Waypoint Mission Control</p>
+        </div>
+        <div>
+            <button class="btn btn-danger" @onclick="EmergencyRTH">
+                <i class="bi bi-arrow-return-left me-1"></i>Fleet Return-To-Home (RTH)
+            </button>
+        </div>
+    </div>
+
+    <!-- Drone Fleet Status Grid -->
+    <div class="row mb-4">
+        @foreach (var drone in Drones)
+        {
+            <div class="col-md-4 mb-3">
+                <div class="card h-100 shadow-sm border-@(drone.Status == "EnRoute" ? "primary" : drone.Status == "DeliveringPayload" ? "danger" : "success")">
+                    <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+                        <strong>@drone.Identifier</strong>
+                        <span class="badge bg-@(drone.Status == "EnRoute" ? "primary" : drone.Status == "DeliveringPayload" ? "danger" : "success")">@drone.Status</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-muted">Payload:</span>
+                            <span class="fw-bold">@drone.PayloadType</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-muted">Altitude / Speed:</span>
+                            <span>@drone.AltitudeMeters m AGL • @drone.SpeedKmh km/h</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-muted">Target Incident:</span>
+                            <span class="badge bg-secondary">@drone.TargetIncidentId</span>
+                        </div>
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between small mb-1">
+                                <span>Battery State:</span>
+                                <strong>@drone.BatteryPercent%</strong>
+                            </div>
+                            <div class="progress" style="height: 6px;">
+                                <div class="progress-bar @(drone.BatteryPercent > 50 ? "bg-success" : "bg-warning")" style="width: @(drone.BatteryPercent)%"></div>
+                            </div>
+                        </div>
+
+                        <!-- Video Stream Feed Preview -->
+                        <div class="bg-black rounded p-2 text-center text-white position-relative" style="height: 140px;">
+                            <div class="d-flex justify-content-center align-items-center h-100 flex-column">
+                                <i class="bi bi-camera-video-fill fs-2 text-danger mb-1"></i>
+                                <small class="text-white-50">Live Optical & Thermal 1080p60</small>
+                                <span class="badge bg-danger position-absolute top-0 start-0 m-2">LIVE</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-light d-flex justify-content-between">
+                        <button class="btn btn-sm btn-outline-primary" @onclick="() => DeployAed(drone.Identifier)">
+                            <i class="bi bi-box-arrow-down me-1"></i>Deploy AED
+                        </button>
+                        <button class="btn btn-sm btn-outline-secondary" @onclick="() => ManualOverride(drone.Identifier)">
+                            <i class="bi bi-joystick me-1"></i>Manual Pilot
+                        </button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    private record DroneFleetUnit(
+        string Identifier,
+        string PayloadType,
+        string Status,
+        int BatteryPercent,
+        double AltitudeMeters,
+        double SpeedKmh,
+        string TargetIncidentId
+    );
+
+    private List<DroneFleetUnit> Drones = new()
+    {
+        new("AERO-MED-1", "Automated External Defibrillator (AED)", "EnRoute", 84, 120.5, 68.0, "INC-1001"),
+        new("AERO-MED-2", "EpiPen & Trauma Kit", "DeliveringPayload", 72, 15.0, 4.2, "INC-1002"),
+        new("AERO-RECON-1", "Dual Thermal/Optical Sensor", "StationaryHover", 91, 180.0, 0.0, "INC-1001")
+    };
+
+    private void DeployAed(string droneId)
+    {
+        // Deploy AED
+    }
+
+    private void ManualOverride(string droneId)
+    {
+        // Manual override
+    }
+
+    private void EmergencyRTH()
+    {
+        // Fleet RTH
+    }
+}

@@ -1,0 +1,46 @@
+@page "/login"
+@using System.Net.Http
+@using System.Net.Http.Json
+@inject NavigationManager Navigation
+@inject HttpClient Http
+
+<h3>Login</h3>
+
+<EditForm Model="loginModel" OnValidSubmit="HandleLogin">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="mb-3">
+        <label>Email</label>
+        <InputText @bind-Value="loginModel.Email" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label>Password</label>
+        <InputText type="password" @bind-Value="loginModel.Password" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary" disabled="@isLoading">@((isLoading) ? "Logging in..." : "Login")</button>
+</EditForm>
+
+@code {
+    private class LoginModel { public string Email { get; set; } = string.Empty; public string Password { get; set; } = string.Empty; }
+    private LoginModel loginModel = new();
+    private bool isLoading = false;
+
+    private async Task HandleLogin()
+    {
+        isLoading = true;
+        var response = await Http.PostAsJsonAsync("/api/auth/login", loginModel);
+        if (response.IsSuccessStatusCode)
+        {
+            var token = await response.Content.ReadFromJsonAsync<string>();
+            // Store token (simplified example, localStorage via JS interop could be used)
+            // For demo, navigate to dashboard
+            Navigation.NavigateTo("/dashboard");
+        }
+        else
+        {
+            // Show error (simplified)
+            Console.WriteLine("Login failed");
+        }
+        isLoading = false;
+    }
+}

@@ -1,0 +1,27 @@
+@page "/tenants"
+@using Radzen.Blazor
+
+<PageTitle>Multi-Agency Tenancy Management</PageTitle>
+
+<div class="rz-p-4">
+    <RadzenHeading Size="H1" Text="Multi-Agency Tenancy & Municipal Isolation" />
+    <div class="rz-text-body2 rz-my-2 rz-color-base-300">Row-level security, tenant headers, and jurisdictional boundaries.</div>
+
+    <RadzenCard class="rz-my-4">
+        <RadzenHeading Size="H3" Text="Registered Agencies" />
+        <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 12px;">
+            <div style="padding: 12px; background: #1e293b; border-radius: 4px; display: flex; justify-content: space-between;">
+                <span>🏢 Metro Police Department (POLICE_DEPT_SF)</span>
+                <RadzenBadge BadgeStyle="BadgeStyle.Success" Text="ACTIVE" />
+            </div>
+            <div style="padding: 12px; background: #1e293b; border-radius: 4px; display: flex; justify-content: space-between;">
+                <span>🚒 County Fire & Rescue (FIRE_DISTRICT_01)</span>
+                <RadzenBadge BadgeStyle="BadgeStyle.Success" Text="ACTIVE" />
+            </div>
+            <div style="padding: 12px; background: #1e293b; border-radius: 4px; display: flex; justify-content: space-between;">
+                <span>🌐 Federal Emergency Management (FEMA_REGION_9)</span>
+                <RadzenBadge BadgeStyle="BadgeStyle.Success" Text="ACTIVE" />
+            </div>
+        </div>
+    </RadzenCard>
+</div>
