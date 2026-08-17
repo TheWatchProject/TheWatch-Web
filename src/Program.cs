@@ -1,3 +1,13 @@
+// <copyright file="Program.cs" company="The Watch, LLC">
+// Copyright (c) 2026 Barton Milnor Mallory, The Watch, LLC. All rights reserved.
+// </copyright>
+
+/// <summary>
+/// Source file: src/Clients/TheWatch.Web.Admin/Program.cs
+/// Module: Client Interfaces, Blazor Hybrid UI & Tactical Dashboards
+/// Defines: Program
+/// Namespace: TheWatch
+/// </summary>
 using TheWatch.ServiceDefaults;
 using Radzen;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
