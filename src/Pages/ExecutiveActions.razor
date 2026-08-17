@@ -1,0 +1,61 @@
+@page "/executive-actions"
+@using TheWatch.UI.RazorComponents.Components
+@using Radzen.Blazor
+
+<PageTitle>Executive Action Operations</PageTitle>
+
+<div class="rz-p-4">
+    <RadzenHeading Size="H1" Text="Executive Operational Command Center" />
+    <div class="rz-text-body1 rz-my-2 rz-color-base-300">
+        Strategic, high-impact emergency actions requiring multi-agency commander authorization.
+    </div>
+
+    <RadzenCard class="rz-my-4">
+        <RadzenHeading Size="H3" Text="Active Emergency Protocols" />
+
+        <div style="display: flex; flex-direction: column; gap: 16px; margin-top: 16px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px; background: #1e293b; border-radius: 8px;">
+                <div>
+                    <div style="font-weight: 700; color: #ef4444;">🚨 Trigger Regional Disaster Declaration</div>
+                    <div class="rz-text-caption rz-color-base-400">Escalates all active P1 incidents, alerts governor's emergency office, and engages FEMA link.</div>
+                </div>
+                <RadzenButton ButtonStyle="ButtonStyle.Danger" Text="EXECUTE" Click="@(() => RequestAction("Trigger Regional Disaster Declaration & Governor Alert"))" />
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px; background: #1e293b; border-radius: 8px;">
+                <div>
+                    <div style="font-weight: 700; color: #f59e0b;">🚁 Deploy Autonomous Salt-Drone Swarm</div>
+                    <div class="rz-text-caption rz-color-base-400">Launches all 6 standby search-and-rescue autonomous drones on high-priority grid scans.</div>
+                </div>
+                <RadzenButton ButtonStyle="ButtonStyle.Warning" Text="DEPLOY SWARM" Click="@(() => RequestAction("Deploy All Standby Salt-Drones to Active Incidents"))" />
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px; background: #1e293b; border-radius: 8px;">
+                <div>
+                    <div style="font-weight: 700; color: #38bdf8;">🌐 Engage Offline P2P Mesh Grid Fallback</div>
+                    <div class="rz-text-caption rz-color-base-400">Forces field responder mobile units into local store-and-forward relay mesh mode.</div>
+                </div>
+                <RadzenButton ButtonStyle="ButtonStyle.Info" Text="FORCE MESH" Click="@(() => RequestAction("Engage Offline P2P Mesh Grid Fallback"))" />
+            </div>
+        </div>
+    </RadzenCard>
+</div>
+
+<ExecutiveActionModal IsOpen="@isModalOpen" ActionDescription="@selectedAction" OnConfirm="@ConfirmAction" OnCancel="@(() => isModalOpen = false)" />
+
+@code {
+    private bool isModalOpen = false;
+    private string selectedAction = string.Empty;
+
+    private void RequestAction(string action)
+    {
+        selectedAction = action;
+        isModalOpen = true;
+    }
+
+    private void ConfirmAction()
+    {
+        isModalOpen = false;
+        // In real app, dispatches signed command to Control Plane
+    }
+}

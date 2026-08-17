@@ -1,0 +1,27 @@
+@page "/tickets"
+@using TheWatch.UI.RazorComponents.Components
+@using Radzen.Blazor
+
+<PageTitle>Operations & Dispatch Ticketing</PageTitle>
+
+<div class="rz-p-4">
+    <RadzenHeading Size="H1" Text="Operational Incident Ticketing System" />
+    <div class="rz-text-body2 rz-my-2 rz-color-base-300">ITIL SLA monitoring, responder assignments, and resolution tracking.</div>
+
+    <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 16px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px; background: #1e293b; border-radius: 8px;">
+            <div>
+                <strong>TCK-1001: Structural Collapse Assessment Required</strong>
+                <div class="rz-text-caption rz-color-base-400">Incident: INC-1001 • Assigned: USAR Team 1</div>
+            </div>
+            <SlaCountdownTimer RemainingMinutes="6" />
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px; background: #1e293b; border-radius: 8px;">
+            <div>
+                <strong>TCK-1002: Hazmat Decontamination Corridor Setup</strong>
+                <div class="rz-text-caption rz-color-base-400">Incident: INC-1004 • Assigned: Hazmat Unit 2</div>
+            </div>
+            <SlaCountdownTimer RemainingMinutes="18" />
+        </div>
+    </div>
+</div>

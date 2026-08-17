@@ -1,0 +1,155 @@
+@page "/tactical-map"
+@using TheWatch.Contracts
+@inject NavigationManager Navigation
+@implements IAsyncDisposable
+
+<div class="container-fluid p-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h2 class="text-primary fw-bold"><i class="bi bi-geo-alt-fill me-2"></i>Tactical GIS Map & Geofence Monitor</h2>
+            <p class="text-muted mb-0">High-Resolution Geospatial Situational Awareness (10Hz Telemetry & Geofence Bounds)</p>
+        </div>
+        <div class="d-flex gap-2">
+            <button class="btn btn-outline-primary" @onclick="RefreshSectors">
+                <i class="bi bi-arrow-clockwise me-1"></i>Refresh GIS Layers
+            </button>
+            <span class="badge @(IsStreamConnected ? "bg-success" : "bg-warning text-dark") fs-6 d-flex align-items-center">
+                <i class="bi @(IsStreamConnected ? "bi-broadcast" : "bi-exclamation-triangle") me-1"></i>
+                @(IsStreamConnected ? "10Hz Live Stream Active" : "Connecting...")
+            </span>
+        </div>
+    </div>
+
+    <!-- GIS Map Viewport / SVG Layer -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+            <span><i class="bi bi-layers-fill me-2"></i>Sector Alpha-1 Tactical Overlay (San Francisco Metropolitan CAD)</span>
+            <span class="badge bg-danger">3 Active Geofences</span>
+        </div>
+        <div class="card-body p-0 position-relative" style="height: 520px; background: #1a1e24; overflow: hidden;">
+            <!-- Grid lines simulation -->
+            <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" class="position-absolute">
+                <defs>
+                    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                        <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#2d333b" stroke-width="1"/>
+                    </pattern>
+                </defs>
+                <rect width="100%" height="100%" fill="url(#grid)" />
+                
+                <!-- Geofence Hazard Zone Polygon -->
+                <polygon points="120,80 340,60 410,220 200,280" fill="rgba(220, 53, 69, 0.25)" stroke="#dc3545" stroke-width="2" stroke-dasharray="6,4" />
+                @((MarkupString)"<text x=\"210\" y=\"160\" fill=\"#dc3545\" font-size=\"12\" font-weight=\"bold\">HAZMAT / FLOOD PERIMETER</text>")
+
+                <!-- Evacuation Safe Zone Polygon -->
+                <polygon points="560,180 820,150 880,360 620,390" fill="rgba(40, 167, 69, 0.2)" stroke="#28a745" stroke-width="2" />
+                @((MarkupString)"<text x=\"660\" y=\"270\" fill=\"#28a745\" font-size=\"12\" font-weight=\"bold\">CIVILIAN EVACUATION SHELTER</text>")
+
+                <!-- Tactical Units Coordinates -->
+                @foreach (var unit in TacticalUnits)
+                {
+                    <circle cx="@unit.PixelX" cy="@unit.PixelY" r="10" fill="@unit.Color" stroke="#ffffff" stroke-width="2" />
+                    @((MarkupString)$"<text x=\"{unit.PixelX + 14}\" y=\"{unit.PixelY + 4}\" fill=\"#ffffff\" font-size=\"11\" font-weight=\"bold\">{unit.Callsign}</text>")
+                }
+            </svg>
+
+            <!-- Map Controls Overlay -->
+            <div class="position-absolute top-0 end-0 m-3 p-2 bg-dark bg-opacity-75 rounded text-white small" style="width: 220px;">
+                <div class="fw-bold mb-2"><i class="bi bi-toggles me-1"></i>Map Layers</div>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="hazardToggle" checked>
+                    <label class="form-check-label" for="hazardToggle">Hazard Polygons</label>
+                </div>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="shelterToggle" checked>
+                    <label class="form-check-label" for="shelterToggle">Evacuation Safe Zones</label>
+                </div>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="unitsToggle" checked>
+                    <label class="form-check-label" for="unitsToggle">Field Units (GPS 10Hz)</label>
+                </div>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="dronesToggle" checked>
+                    <label class="form-check-label" for="dronesToggle">AED Drone Flight Paths</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Telemetry Units Table -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">Live Active Responders (GPS Telemetry Stream)</h5>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Callsign</th>
+                                <th>Unit Type</th>
+                                <th>Coordinates</th>
+                                <th>Speed</th>
+                                <th>Bearing</th>
+                                <th>Battery / Fuel</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var unit in TacticalUnits)
+                            {
+                                <tr>
+                                    <td><strong>@unit.Callsign</strong></td>
+                                    <td><span class="badge bg-secondary">@unit.UnitType</span></td>
+                                    <td><code>@unit.Latitude.ToString("F5"), @unit.Longitude.ToString("F5")</code></td>
+                                    <td>@unit.SpeedKmh km/h</td>
+                                    <td>@unit.HeadingDegrees°</td>
+                                    <td>
+                                        <div class="progress" style="height: 8px; width: 80px;">
+                                            <div class="progress-bar @(unit.BatteryPercent > 50 ? "bg-success" : unit.BatteryPercent > 20 ? "bg-warning" : "bg-danger")" style="width: @(unit.BatteryPercent)%"></div>
+                                        </div>
+                                        <small class="text-muted">@unit.BatteryPercent%</small>
+                                    </td>
+                                    <td><span class="badge bg-primary">@unit.Status</span></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private bool IsStreamConnected = true;
+
+    private record TacticalUnitMarker(
+        string Callsign,
+        string UnitType,
+        double Latitude,
+        double Longitude,
+        int PixelX,
+        int PixelY,
+        double SpeedKmh,
+        int HeadingDegrees,
+        int BatteryPercent,
+        string Status,
+        string Color
+    );
+
+    private List<TacticalUnitMarker> TacticalUnits = new()
+    {
+        new("MEDIC-42", "ALS Ambulance", 37.7749, -122.4194, 260, 180, 48.5, 85, 92, "EnRoute", "#0d6efd"),
+        new("ENGINE-7", "Heavy Rescue", 37.7840, -122.4150, 420, 240, 0.0, 0, 88, "OnScene", "#dc3545"),
+        new("AERO-MED-1", "AED Drone", 37.7885, -122.4020, 720, 140, 62.0, 145, 78, "Airborne", "#ffc107"),
+        new("CHIEF-1", "Command Vehicle", 37.7650, -122.4300, 180, 320, 15.2, 210, 96, "Staged", "#198754")
+    };
+
+    private void RefreshSectors()
+    {
+        // Refresh GIS layers
+    }
+
+    public ValueTask DisposeAsync() => ValueTask.CompletedTask;
+}

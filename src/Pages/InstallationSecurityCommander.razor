@@ -1,0 +1,151 @@
+@page "/installation-security"
+@using TheWatch.Contracts
+@using TheWatch.Geospatial.Db
+@using static TheWatch.Contracts.InstallationSecurityContracts
+
+<PageTitle>Installation Security Coordination</PageTitle>
+
+<div class="rz-p-4" style="max-width: 1300px; margin: 0 auto;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+        <div>
+            <h1 style="color: white; font-weight: 800; font-size: 1.8rem; margin-bottom: 4px;">🏛️ Installation Security & Facility Command Hub</h1>
+            <div style="color: #94a3b8; font-size: 0.9rem;">
+                Cross-echelon coordination for command staff, security forces, on-site personnel, external inspection teams, and off-site stakeholders.
+            </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <span style="color: #94a3b8; font-size: 0.85rem; font-weight: 600;">THREAT CON:</span>
+            <span class="watch-badge @GetThreatBadgeClass(_currentFacility?.CurrentThreatLevel ?? FacilityThreatLevel.FPCON_Normal)" style="padding: 8px 16px; font-weight: 800; font-size: 0.95rem;">
+                @(_currentFacility?.CurrentThreatLevel.ToString().Replace("_", " "))
+            </span>
+        </div>
+    </div>
+
+    <!-- Threat Level Escalator Controls -->
+    <div style="background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 18px; margin-bottom: 24px;">
+        <div style="color: #cbd5e1; font-weight: 700; margin-bottom: 10px; font-size: 0.95rem;">Command FPCON Threat Level Escalator:</div>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+            <button @onclick="() => SetThreatLevel(FacilityThreatLevel.FPCON_Normal)" style="padding: 10px 18px; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; background: #10b981; color: white;">FPCON Normal</button>
+            <button @onclick="() => SetThreatLevel(FacilityThreatLevel.FPCON_Alpha)" style="padding: 10px 18px; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; background: #3b82f6; color: white;">FPCON Alpha</button>
+            <button @onclick="() => SetThreatLevel(FacilityThreatLevel.FPCON_Bravo)" style="padding: 10px 18px; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; background: #f59e0b; color: white;">FPCON Bravo</button>
+            <button @onclick="() => SetThreatLevel(FacilityThreatLevel.FPCON_Charlie)" style="padding: 10px 18px; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; background: #ea580c; color: white;">FPCON Charlie</button>
+            <button @onclick="() => SetThreatLevel(FacilityThreatLevel.FPCON_Delta)" style="padding: 10px 18px; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; background: #dc2626; color: white;">FPCON Delta (Lockdown)</button>
+        </div>
+    </div>
+
+    <!-- Facility Muster Roll Summary -->
+    @if (_musterRoll != null)
+    {
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 24px;">
+            <div style="background: rgba(15, 23, 42, 0.9); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 18px;">
+                <div style="color: #94a3b8; font-size: 0.8rem; font-weight: 600;">TOTAL ON-SITE PERSONNEL</div>
+                <div style="color: white; font-size: 1.8rem; font-weight: 800;">@_musterRoll.TotalPersonnelExpected</div>
+            </div>
+            <div style="background: rgba(15, 23, 42, 0.9); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 18px;">
+                <div style="color: #94a3b8; font-size: 0.8rem; font-weight: 600;">ACCOUNTED FOR</div>
+                <div style="color: #34d399; font-size: 1.8rem; font-weight: 800;">@_musterRoll.AccountedForCount</div>
+            </div>
+            <div style="background: rgba(15, 23, 42, 0.9); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 18px;">
+                <div style="color: #94a3b8; font-size: 0.8rem; font-weight: 600;">UNACCOUNTED / DRIFT</div>
+                <div style="color: #f87171; font-size: 1.8rem; font-weight: 800;">@_musterRoll.MissingOrUnaccountedCount</div>
+            </div>
+        </div>
+    }
+
+    <!-- Personnel & Command Hierarchy Roster -->
+    <div style="background: rgba(15, 23, 42, 0.9); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 24px;">
+        <h3 style="color: white; font-weight: 700; margin-bottom: 16px; font-size: 1.2rem;">Command Roster & Stakeholder Registry</h3>
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem;">
+                <thead>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.1); color: #94a3b8;">
+                        <th style="padding: 12px;">NAME</th>
+                        <th style="padding: 12px;">ROLE</th>
+                        <th style="padding: 12px;">ORGANIZATION / AGENCY</th>
+                        <th style="padding: 12px;">CLEARANCE</th>
+                        <th style="padding: 12px;">BADGE</th>
+                        <th style="padding: 12px;">STATION</th>
+                        <th style="padding: 12px;">STATUS</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var person in _personnel)
+                    {
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.05); color: white;">
+                            <td style="padding: 12px; font-weight: 700;">@person.FullName</td>
+                            <td style="padding: 12px;">
+                                <span class="watch-badge @GetRoleBadgeClass(person.Role)">@person.Role</span>
+                            </td>
+                            <td style="padding: 12px; color: #cbd5e1;">@person.OrganizationOrAgency</td>
+                            <td style="padding: 12px;"><span style="color: #38bdf8; font-weight: 700;">Level @person.ClearanceLevel</span></td>
+                            <td style="padding: 12px; font-family: monospace; color: #94a3b8;">@person.BadgeNumber</td>
+                            <td style="padding: 12px; color: #cbd5e1;">@person.AssignedStationOrZone</td>
+                            <td style="padding: 12px;">
+                                @if (person.IsCurrentlyOnSite)
+                                {
+                                    <span style="color: #34d399; font-weight: 600;">● ON-SITE</span>
+                                }
+                                else
+                                {
+                                    <span style="color: #94a3b8; font-weight: 600;">○ OFF-SITE</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@code {
+    private FacilityInstallation? _currentFacility;
+    private IReadOnlyList<InstallationPersonnel> _personnel = new List<InstallationPersonnel>();
+    private FacilityMusterRoll? _musterRoll;
+    private readonly InstallationSecurityEngine _engine = new();
+
+    protected override void OnInitialized()
+    {
+        _currentFacility = _engine.GetFacility("FAC-PRESIDIO-HQ");
+        RefreshData();
+    }
+
+    private void RefreshData()
+    {
+        if (_currentFacility != null)
+        {
+            _personnel = _engine.GetPersonnelByFacility(_currentFacility.FacilityId);
+            _musterRoll = _engine.GenerateMusterRoll(_currentFacility.FacilityId);
+        }
+    }
+
+    private void SetThreatLevel(FacilityThreatLevel level)
+    {
+        if (_currentFacility != null)
+        {
+            _engine.UpdateThreatLevel(_currentFacility.FacilityId, level);
+            _currentFacility = _engine.GetFacility(_currentFacility.FacilityId);
+            RefreshData();
+        }
+    }
+
+    private string GetThreatBadgeClass(FacilityThreatLevel level) => level switch
+    {
+        FacilityThreatLevel.FPCON_Normal => "watch-badge-green",
+        FacilityThreatLevel.FPCON_Alpha => "watch-badge-blue",
+        FacilityThreatLevel.FPCON_Bravo => "watch-badge-amber",
+        FacilityThreatLevel.FPCON_Charlie => "watch-badge-purple",
+        FacilityThreatLevel.FPCON_Delta => "watch-badge-red",
+        _ => "watch-badge-blue"
+    };
+
+    private string GetRoleBadgeClass(FacilityPersonnelRole role) => role switch
+    {
+        FacilityPersonnelRole.InstallationCommander => "watch-badge-red",
+        FacilityPersonnelRole.ChiefSecurityOfficer => "watch-badge-purple",
+        FacilityPersonnelRole.WatchCommander => "watch-badge-blue",
+        FacilityPersonnelRole.ExternalInspector => "watch-badge-amber",
+        FacilityPersonnelRole.OffSiteCustomerOrClient => "watch-badge-green",
+        _ => "watch-badge-blue"
+    };
+}

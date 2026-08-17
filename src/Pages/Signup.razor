@@ -1,0 +1,51 @@
+@page "/signup"
+@using System.Net.Http
+@using System.Net.Http.Json
+@inject NavigationManager Navigation
+@inject HttpClient Http
+
+<h3>Sign Up</h3>
+
+<EditForm Model="signupModel" OnValidSubmit="HandleSignup">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="mb-3">
+        <label>Name</label>
+        <InputText @bind-Value="signupModel.Name" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label>Email</label>
+        <InputText @bind-Value="signupModel.Email" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label>Password</label>
+        <InputText type="password" @bind-Value="signupModel.Password" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label>Agency</label>
+        <InputText @bind-Value="signupModel.Agency" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary" disabled="@isLoading">@((isLoading) ? "Signing up..." : "Sign Up")</button>
+</EditForm>
+
+@code {
+    private class SignupModel { public string Name { get; set; } = string.Empty; public string Email { get; set; } = string.Empty; public string Password { get; set; } = string.Empty; public string Agency { get; set; } = string.Empty; }
+    private SignupModel signupModel = new();
+    private bool isLoading = false;
+
+    private async Task HandleSignup()
+    {
+        isLoading = true;
+        var response = await Http.PostAsJsonAsync("/api/auth/signup", signupModel);
+        if (response.IsSuccessStatusCode)
+        {
+            // In a real app you would handle email verification, etc.
+            Navigation.NavigateTo("/login");
+        }
+        else
+        {
+            Console.WriteLine("Signup failed");
+        }
+        isLoading = false;
+    }
+}

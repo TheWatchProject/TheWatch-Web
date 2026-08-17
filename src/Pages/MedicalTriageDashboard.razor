@@ -1,0 +1,33 @@
+@page "/triage"
+@using TheWatch.UI.RazorComponents.Components
+@using Radzen.Blazor
+
+<PageTitle>Mass Casualty START Triage Board</PageTitle>
+
+<div class="rz-p-4">
+    <RadzenHeading Size="H1" Text="Mass Casualty Incident (MCI) Triage Board" />
+    <div class="rz-text-body2 rz-my-2 rz-color-base-300">Simple Triage and Rapid Treatment (START) live patient tracking.</div>
+
+    <div class="rz-my-4" style="display: flex; gap: 16px;">
+        <div style="flex: 1; padding: 16px; background: #fee2e2; color: #991b1b; border-radius: 8px;">
+            <div style="font-weight: 700;">RED (IMMEDIATE)</div>
+            <div style="font-size: 2rem; font-weight: 700;">4</div>
+            <div class="rz-text-caption">Immediate airway / trauma</div>
+        </div>
+        <div style="flex: 1; padding: 16px; background: #fef3c7; color: #92400e; border-radius: 8px;">
+            <div style="font-weight: 700;">YELLOW (DELAYED)</div>
+            <div style="font-size: 2rem; font-weight: 700;">7</div>
+            <div class="rz-text-caption">Stable serious injuries</div>
+        </div>
+        <div style="flex: 1; padding: 16px; background: #dcfce7; color: #166534; border-radius: 8px;">
+            <div style="font-weight: 700;">GREEN (MINOR)</div>
+            <div style="font-size: 2rem; font-weight: 700;">18</div>
+            <div class="rz-text-caption">Ambulatory walking wounded</div>
+        </div>
+        <div style="flex: 1; padding: 16px; background: #1e293b; color: #f8fafc; border-radius: 8px;">
+            <div style="font-weight: 700;">BLACK (EXPECTANT)</div>
+            <div style="font-size: 2rem; font-weight: 700;">0</div>
+            <div class="rz-text-caption">Deceased / non-salvageable</div>
+        </div>
+    </div>
+</div>

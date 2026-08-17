@@ -1,0 +1,38 @@
+@page "/analytics"
+@using TheWatch.UI.RazorComponents.Components
+@using TheWatch.Infrastructure.Analytics
+@using Radzen.Blazor
+
+<PageTitle>Platform & App Analytics</PageTitle>
+
+<div class="rz-p-4">
+    <RadzenHeading Size="H1" Text="Live Platform & App Analytics" />
+
+    <div class="rz-my-4" style="display: flex; gap: 16px; flex-wrap: wrap;">
+        <EmergencyMetricCard Title="Total Active Clients" Value="403" MetricColor="#10b981" TrendText="+8%" TrendPositive="@true" />
+        <EmergencyMetricCard Title="API Latency (p50)" Value="12.4ms" MetricColor="#38bdf8" TrendText="Sub-15ms" TrendPositive="@true" />
+        <EmergencyMetricCard Title="API Latency (p95)" Value="42.1ms" MetricColor="#f59e0b" TrendText="Normal" TrendPositive="@true" />
+        <EmergencyMetricCard Title="Error Rate" Value="0.01%" MetricColor="#10b981" TrendText="-0.02%" TrendPositive="@true" />
+    </div>
+
+    <RadzenCard class="rz-my-4">
+        <RadzenHeading Size="H3" Text="Active Users by Platform Architecture" />
+        <div style="display: flex; gap: 24px; margin-top: 16px;">
+            <div style="padding: 16px; background: #1e293b; border-radius: 8px; flex: 1;">
+                <div style="font-weight: 700; color: #38bdf8;">Apple iOS & WatchOS</div>
+                <div class="rz-text-h4 rz-my-1">142</div>
+                <div class="rz-text-caption rz-color-base-400">SwiftData + Multipeer Active</div>
+            </div>
+            <div style="padding: 16px; background: #1e293b; border-radius: 8px; flex: 1;">
+                <div style="font-weight: 700; color: #10b981;">Android & Wear OS</div>
+                <div class="rz-text-h4 rz-my-1">198</div>
+                <div class="rz-text-caption rz-color-base-400">Jetpack Compose + Nearby Active</div>
+            </div>
+            <div style="padding: 16px; background: #1e293b; border-radius: 8px; flex: 1;">
+                <div style="font-weight: 700; color: #a855f7;">.NET MAUI Hybrid Desktop</div>
+                <div class="rz-text-h4 rz-my-1">45</div>
+                <div class="rz-text-caption rz-color-base-400">MacCatalyst & Windows 11</div>
+            </div>
+        </div>
+    </RadzenCard>
+</div>

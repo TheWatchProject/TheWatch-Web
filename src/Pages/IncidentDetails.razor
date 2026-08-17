@@ -1,0 +1,42 @@
+@page "/incidents/{Id}"
+@using TheWatch.UI.RazorComponents.Components
+@using Radzen.Blazor
+
+<PageTitle>Incident Command Room: @Id</PageTitle>
+
+<div class="rz-p-4">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div>
+            <RadzenHeading Size="H2" Text="@($"Incident Command Room: {Id}")" />
+            <div class="rz-text-caption rz-color-base-400">Location: 4th Avenue & Main Street • Type: Structure Fire Class B</div>
+        </div>
+        <LiveIncidentBadge Severity="CRITICAL" />
+    </div>
+
+    <div class="rz-my-4" style="display: grid; grid-template-columns: 2fr 1fr; gap: 16px;">
+        <RadzenCard>
+            <RadzenHeading Size="H4" Text="Incident Audio & Communications Stream" />
+            <AudioWaveformPlayer AudioTitle="Dispatcher & Field Radio Stream" DurationText="02:14" />
+
+            <div class="rz-mt-4">
+                <RadzenHeading Size="H4" Text="Tactical Operational Notes" />
+                <div style="padding: 12px; background: #1e293b; border-radius: 6px; font-size: 0.9rem; color: #f8fafc;">
+                    3 Trapped casualties reported on 2nd floor. Engine 4 deployed primary water attack line. Hazmat containment zone established.
+                </div>
+            </div>
+        </RadzenCard>
+
+        <RadzenCard>
+            <RadzenHeading Size="H4" Text="Assigned Response Units" />
+            <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 12px;">
+                <div style="padding: 10px; background: #1e293b; border-radius: 4px; font-weight: 600;">🚒 Engine Company 4 (On Scene)</div>
+                <div style="padding: 10px; background: #1e293b; border-radius: 4px; font-weight: 600;">🚑 Paramedic Unit 12 (En Route - ETA 2m)</div>
+                <div style="padding: 10px; background: #1e293b; border-radius: 4px; font-weight: 600;">🚁 Salt-Drone Recon 01 (Overhead)</div>
+            </div>
+        </RadzenCard>
+    </div>
+</div>
+
+@code {
+    [Parameter] public string Id { get; set; } = "INC-1001";
+}

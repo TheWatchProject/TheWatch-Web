@@ -1,0 +1,24 @@
+@page "/eula"
+@using System.Net.Http
+@using System.Net.Http.Json
+@inject NavigationManager Navigation
+@inject HttpClient Http
+
+<h3>End User License Agreement</h3>
+<div style="max-height: 400px; overflow-y: auto; border: 1px solid #ccc; padding: 1rem; margin-bottom: 1rem;">
+    <p><!-- EULA content goes here. For demo purposes, placeholder text. --></p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. ... (full EULA text)</p>
+</div>
+<input type="checkbox" @bind="agreed" /> I have read and agree to the terms.
+<br />
+<button class="btn btn-primary" disabled="@(!agreed)" @onclick="Accept">Continue</button>
+
+@code {
+    private bool agreed = false;
+    private async Task Accept()
+    {
+        // In a real app, record consent timestamp via API
+        await Http.PostAsJsonAsync("/api/consent/eula", new { accepted = DateTime.UtcNow });
+        Navigation.NavigateTo("/login");
+    }
+}

@@ -1,0 +1,129 @@
+@page "/citizen-hero"
+@using TheWatch.Contracts
+@using static TheWatch.Contracts.GamificationContracts
+
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="h3 fw-bold mb-1">🏆 Citizen Hero & Community Responder Network</h2>
+            <p class="text-muted small mb-0">Gamification leaderboards, verified CPR/AED training hours, and Good Samaritan emergency response badges.</p>
+        </div>
+        <span class="badge bg-primary px-3 py-2">Sector: San Francisco Metro</span>
+    </div>
+
+    <div class="row g-4 mb-4">
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 text-center p-3">
+                <h4 class="fw-bold text-primary mb-1">1,482</h4>
+                <small class="text-muted">Active Citizen Responders</small>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 text-center p-3">
+                <h4 class="fw-bold text-success mb-1">94.2%</h4>
+                <small class="text-muted">Verified CPR/AED Compliance</small>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 text-center p-3">
+                <h4 class="fw-bold text-warning mb-1">214</h4>
+                <small class="text-muted">Lives Impacted / Saved</small>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 text-center p-3">
+                <h4 class="fw-bold text-danger mb-1">4.2 min</h4>
+                <small class="text-muted">Avg Bystander Arrival Time</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-white py-3 border-bottom">
+                    <h5 class="card-title fw-bold mb-0">Community Hero Leaderboard</h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Rank</th>
+                                    <th>Citizen Hero</th>
+                                    <th>Hero Level</th>
+                                    <th>Experience Points</th>
+                                    <th>Verified Responses</th>
+                                    <th>Badges</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var row in _leaderboard)
+                                {
+                                    <tr>
+                                        <td class="fw-bold">
+                                            @if (row.Rank == 1) { <span>🥇 #1</span> }
+                                            else if (row.Rank == 2) { <span>🥈 #2</span> }
+                                            else if (row.Rank == 3) { <span>🥉 #3</span> }
+                                            else { <span>#@row.Rank</span> }
+                                        </td>
+                                        <td>
+                                            <div class="fw-bold">@row.DisplayHandle</div>
+                                            <small class="text-muted">@row.NeighborhoodSector</small>
+                                        </td>
+                                        <td><span class="badge bg-primary">Level @(1 + row.TotalXp / 500)</span></td>
+                                        <td><strong class="text-success">@row.TotalXp.ToString("N0") XP</strong></td>
+                                        <td>@row.IncidentsResponded</td>
+                                        <td>
+                                            <span class="badge bg-info text-dark">CPR Certified</span>
+                                            <span class="badge bg-warning text-dark">Rapid Responder</span>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-white py-3 border-bottom">
+                    <h5 class="card-title fw-bold mb-0">Available Achievement Badges</h5>
+                </div>
+                <div class="card-body">
+                    @foreach (var b in _badges)
+                    {
+                        <div class="p-3 border rounded mb-3 bg-light d-flex align-items-center">
+                            <div class="fs-2 me-3">@b.IconGlyph</div>
+                            <div>
+                                <h6 class="fw-bold mb-0">@b.BadgeName</h6>
+                                <small class="text-muted d-block">@b.Description</small>
+                                <span class="badge bg-success mt-1">+@b.XpAwarded XP</span>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private List<NeighborhoodLeaderboardRow> _leaderboard = new()
+    {
+        new NeighborhoodLeaderboardRow(1, "USER-01", "CitizenMedic_SF", "Mission District", 3450, 18),
+        new NeighborhoodLeaderboardRow(2, "USER-02", "AeroNurse_Bay", "SOMA Sector", 2890, 14),
+        new NeighborhoodLeaderboardRow(3, "USER-03", "GoldenGateGuard", "Marina District", 2150, 11),
+        new NeighborhoodLeaderboardRow(4, "USER-04", "SunsetRescue_99", "Sunset District", 1820, 8),
+        new NeighborhoodLeaderboardRow(5, "USER-05", "PresidioFirstAid", "Presidio", 1400, 6)
+    };
+
+    private List<CitizenHeroBadge> _badges = new()
+    {
+        new CitizenHeroBadge("B-CPR", "CPR Life Saver", "Perform verified bystander CPR prior to EMS arrival.", "❤️", 500, "1 verified CPR incident"),
+        new CitizenHeroBadge("B-AED", "AED Rapid Deployment", "Deliver public access defibrillator within 3 minutes.", "⚡", 400, "1 AED shock delivered"),
+        new CitizenHeroBadge("B-HERO", "Disaster Relief Volunteer", "Complete 10 hours of certified shelter / sandbag support.", "🛡️", 350, "10 volunteer hours")
+    };
+}

@@ -1,0 +1,31 @@
+@page "/"
+@page "/dashboard"
+@using TheWatch.UI.RazorComponents.Components
+@using Radzen.Blazor
+
+<PageTitle>TheWatch Executive Operations HQ</PageTitle>
+
+<div class="rz-p-4">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <RadzenHeading Size="H1" Text="Executive Command & Dispatch HQ" />
+        <RadzenBadge BadgeStyle="BadgeStyle.Success" Text="SYSTEM STATUS: OPTIMAL" />
+    </div>
+
+    <!-- KPI Metric Cards -->
+    <div class="rz-my-4" style="display: flex; gap: 16px; flex-wrap: wrap;">
+        <EmergencyMetricCard Title="Active Incidents" Value="14" MetricColor="#ef4444" TrendText="+2" TrendPositive="@false" />
+        <EmergencyMetricCard Title="Dispatched Units" Value="38" MetricColor="#38bdf8" TrendText="+12%" TrendPositive="@true" />
+        <EmergencyMetricCard Title="Autonomous Drones" Value="6 / 6" MetricColor="#10b981" TrendText="100% Ready" TrendPositive="@true" />
+        <EmergencyMetricCard Title="Avg Response Time" Value="4.2m" MetricColor="#a855f7" TrendText="-30s" TrendPositive="@true" />
+    </div>
+
+    <!-- Navigation Shortcuts -->
+    <div class="rz-my-4" style="display: flex; gap: 12px;">
+        <RadzenButton Text="Live Incident Grid" ButtonStyle="ButtonStyle.Primary" Click="@(() => NavManager.NavigateTo("/incidents"))" />
+        <RadzenButton Text="Drone Fleet Avionics" ButtonStyle="ButtonStyle.Info" Click="@(() => NavManager.NavigateTo("/drones"))" />
+        <RadzenButton Text="Executive Action Center" ButtonStyle="ButtonStyle.Danger" Click="@(() => NavManager.NavigateTo("/executive-actions"))" />
+        <RadzenButton Text="App Analytics & Latency" ButtonStyle="ButtonStyle.Secondary" Click="@(() => NavManager.NavigateTo("/analytics"))" />
+    </div>
+</div>
+
+@inject NavigationManager NavManager

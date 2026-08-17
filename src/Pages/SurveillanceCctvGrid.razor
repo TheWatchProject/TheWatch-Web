@@ -1,0 +1,62 @@
+@page "/surveillance-cctv"
+@using TheWatch.Contracts
+@using static TheWatch.Contracts.SurveillanceAndCctvContracts
+
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="h3 fw-bold mb-1">📹 CCTV Tactical Video Matrix & AI Vision Feeds</h2>
+            <p class="text-muted small mb-0">ONVIF Profile S and RTSP live streams with automated Florence-2 / YOLOv8 object detection (weapons, smoke, vehicle plates).</p>
+        </div>
+        <div class="d-flex gap-2">
+            <span class="badge bg-danger px-3 py-2">LIVE RTSP STREAMING</span>
+            <span class="badge bg-success px-3 py-2">AI OBJECT DETECTION: ACTIVE</span>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-4">
+        @foreach (var cam in _cameras)
+        {
+            <div class="col-lg-6">
+                <div class="card shadow-sm border-0 h-100">
+                    <div class="card-header bg-dark text-white py-2 d-flex justify-content-between align-items-center">
+                        <div>
+                            <span class="badge bg-danger me-2">● LIVE</span>
+                            <span class="fw-bold">@cam.CameraName</span>
+                        </div>
+                        <small class="text-muted"><code>@cam.CameraId</code> | @cam.Protocol</small>
+                    </div>
+                    <div class="card-body p-0 bg-black text-center position-relative" style="min-height: 260px; display: flex; align-items: center; justify-content: center;">
+                        <div class="text-light opacity-75">
+                            <div class="display-6 mb-2">📹</div>
+                            <div class="small fw-semibold">RTSP Video Stream: @cam.StreamUrl</div>
+                            <small class="text-secondary">Heading: @cam.HeadingDegrees° | Range: @cam.CoverageRadiusMeters m</small>
+                        </div>
+                        <div class="position-absolute top-0 end-0 m-3">
+                            <span class="badge bg-warning text-dark">PTZ Authorized</span>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-white d-flex justify-content-between align-items-center py-2">
+                        <small class="text-muted">Coords: @cam.Latitude.ToString("F4"), @cam.Longitude.ToString("F4")</small>
+                        <div class="btn-group btn-group-sm">
+                            <button class="btn btn-outline-secondary">PTZ Left</button>
+                            <button class="btn btn-outline-secondary">PTZ Right</button>
+                            <button class="btn btn-outline-primary">Zoom 2x</button>
+                            <button class="btn btn-outline-danger">Record Snapshot</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    private List<GeotaggedCctvCamera> _cameras = new()
+    {
+        new GeotaggedCctvCamera("CAM-01", "Market & 4th St Public Safety Cam #1", "rtsp://cameras.sfgov.org/live/market4th_hd", CameraStreamProtocol.ONVIF_ProfileS, 37.7750, -122.4190, 150.0, 45, true, true),
+        new GeotaggedCctvCamera("CAM-02", "Mission & 16th St Transit Hub Cam", "rtsp://cameras.sfgov.org/live/mission16th_ptz", CameraStreamProtocol.RTSP, 37.7650, -122.4200, 200.0, 180, true, true),
+        new GeotaggedCctvCamera("CAM-03", "Bay Bridge Toll Plaza Westbound", "rtsp://cameras.caltrans.gov/live/baybridge_west", CameraStreamProtocol.HLS, 37.7950, -122.3850, 300.0, 270, false, true),
+        new GeotaggedCctvCamera("CAM-04", "Civic Center Emergency Operations Plaza", "rtsp://cameras.sfgov.org/live/civiccenter_ops", CameraStreamProtocol.ONVIF_ProfileS, 37.7790, -122.4180, 180.0, 90, true, true)
+    };
+}

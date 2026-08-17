@@ -1,0 +1,23 @@
+@page "/evidence"
+@using Radzen.Blazor
+
+<PageTitle>ISO 27037 Evidence Ledger</PageTitle>
+
+<div class="rz-p-4">
+    <RadzenHeading Size="H1" Text="ISO 27037 Tamper-Evident Evidence Ledger" />
+    <div class="rz-text-body2 rz-my-2 rz-color-base-300">Cryptographically signed, chained digital forensic records.</div>
+
+    <RadzenCard class="rz-my-4">
+        <RadzenHeading Size="H3" Text="Verified Evidence Blocks" />
+        <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 12px;">
+            <div style="padding: 12px; background: #1e293b; border-left: 4px solid #10b981; border-radius: 4px;">
+                <strong>EVD-9001: 911 Call Audio Stream (WAV)</strong>
+                <div class="rz-text-caption rz-color-base-400">SHA-256: 4f53cda18c2b9a7812e584f... • Chain Valid (Block #104)</div>
+            </div>
+            <div style="padding: 12px; background: #1e293b; border-left: 4px solid #10b981; border-radius: 4px;">
+                <strong>EVD-9002: Drone Thermal Infrared Aerial Video (MP4)</strong>
+                <div class="rz-text-caption rz-color-base-400">SHA-256: 89ab31f4e7c01289de543a... • Chain Valid (Block #105)</div>
+            </div>
+        </div>
+    </RadzenCard>
+</div>
